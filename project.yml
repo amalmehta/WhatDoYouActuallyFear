@@ -1,0 +1,50 @@
+name: WhatDoYouActuallyFear
+options:
+  bundleIdPrefix: com.amalmehta
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  WhatDoYouActuallyFear:
+    type: application
+    platform: macOS
+    sources: [App]
+    settings:
+      base:
+        PRODUCT_NAME: What Do You Actually Fear
+        PRODUCT_MODULE_NAME: WhatDoYouActuallyFear
+        PRODUCT_BUNDLE_IDENTIFIER: com.amalmehta.WhatDoYouActuallyFear
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: What Do You Actually Fear
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.healthcare-fitness
+        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        ENABLE_HARDENED_RUNTIME: NO
+  WhatDoYouActuallyFearTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [Tests]
+    dependencies:
+      - target: WhatDoYouActuallyFear
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/What Do You Actually Fear.app/Contents/MacOS/What Do You Actually Fear"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+schemes:
+  WhatDoYouActuallyFear:
+    build:
+      targets:
+        WhatDoYouActuallyFear: all
+        WhatDoYouActuallyFearTests: [test]
+    test:
+      targets: [WhatDoYouActuallyFearTests]

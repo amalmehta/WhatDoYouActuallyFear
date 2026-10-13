@@ -1,0 +1,504 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		116C6485A84CC3059C423FC5 /* ScreenshotRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AC6AA921516D08005DF109 /* ScreenshotRenderer.swift */; };
+		28B031F437E872E620408DF9 /* EngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D969FB381EBF0A81917E5784 /* EngineTests.swift */; };
+		4294965D42F6A3456BA54D8F /* MainViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AE86789A57EFC2179C4D08 /* MainViews.swift */; };
+		445959B1A13C4AABD6F8D6FC /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D87F44161001967B2BBF94 /* Engine.swift */; };
+		78535BF93E07BB13D2256500 /* Questions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0133897223B495B8E6070F2E /* Questions.swift */; };
+		96A5B591449B653E988F742D /* OnboardingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0AC3AF0F42303517E8AC28 /* OnboardingViews.swift */; };
+		A7C580BC9C94E2B163508300 /* SettingsAndFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F40C200FA08589D0D177E34 /* SettingsAndFeedback.swift */; };
+		AA9C368A15E35904D180A4A1 /* FearLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF08C38C9C453064BF68B806 /* FearLibrary.swift */; };
+		D014199C820C276957DE68B4 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929636F4BDA94A487A7364A4 /* StoreTests.swift */; };
+		D1C4B43430DDC47DDE35C0B3 /* Fear.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0789E49B5530268ABFA4118 /* Fear.swift */; };
+		D26F81A8595D4E68804D8A76 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA65AA3194B50BDD308DA9 /* Theme.swift */; };
+		DBA760589B7CE2C641076EA0 /* WhatDoYouActuallyFearApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA92A97A76434C8A94BEC99 /* WhatDoYouActuallyFearApp.swift */; };
+		DD3083165D9F699A9E1FEC57 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E10348DFB76BB2FA7655FF /* AppStore.swift */; };
+		EDDE27A3BF62A64EF386F9D0 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547663A2E664D7C04433F033 /* Profile.swift */; };
+		F8BD8F5A71A960CA9E5586E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D2898953165CD00D92D3737 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		578460EA91B856CDB7900EB3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7182EEFC47757896F1A0CEB1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6F71622F58AEC0BF48BB9A51;
+			remoteInfo = WhatDoYouActuallyFear;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0133897223B495B8E6070F2E /* Questions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questions.swift; sourceTree = "<group>"; };
+		2B0AC3AF0F42303517E8AC28 /* OnboardingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViews.swift; sourceTree = "<group>"; };
+		3F40C200FA08589D0D177E34 /* SettingsAndFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAndFeedback.swift; sourceTree = "<group>"; };
+		547663A2E664D7C04433F033 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		57AA65AA3194B50BDD308DA9 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		62D87F44161001967B2BBF94 /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
+		65AE86789A57EFC2179C4D08 /* MainViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViews.swift; sourceTree = "<group>"; };
+		7D2898953165CD00D92D3737 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		86E10348DFB76BB2FA7655FF /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
+		929636F4BDA94A487A7364A4 /* StoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTests.swift; sourceTree = "<group>"; };
+		ABA92A97A76434C8A94BEC99 /* WhatDoYouActuallyFearApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatDoYouActuallyFearApp.swift; sourceTree = "<group>"; };
+		B0789E49B5530268ABFA4118 /* Fear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fear.swift; sourceTree = "<group>"; };
+		C8AC6AA921516D08005DF109 /* ScreenshotRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotRenderer.swift; sourceTree = "<group>"; };
+		CCB6645F27338EA28F84FD9F /* WhatDoYouActuallyFearTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhatDoYouActuallyFearTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF08C38C9C453064BF68B806 /* FearLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FearLibrary.swift; sourceTree = "<group>"; };
+		D969FB381EBF0A81917E5784 /* EngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTests.swift; sourceTree = "<group>"; };
+		FAD5225EB6E3F39176616B81 /* WhatDoYouActuallyFear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatDoYouActuallyFear.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		191160519C84983F6E458ACE /* App */ = {
+			isa = PBXGroup;
+			children = (
+				7D2898953165CD00D92D3737 /* Assets.xcassets */,
+				ABA92A97A76434C8A94BEC99 /* WhatDoYouActuallyFearApp.swift */,
+				9CDFB890DFF6A3A439E7137D /* Model */,
+				2CB082241E0A4D86F09F902B /* Store */,
+				ADD9D08DC07495344BA7681A /* Support */,
+				BD66EA5C82395972E182F24E /* Views */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		2AEAD895DD38C8727B642DF0 = {
+			isa = PBXGroup;
+			children = (
+				191160519C84983F6E458ACE /* App */,
+				6C9F79AAAC90B65FDDFE9B80 /* Tests */,
+				31A69061AEC0ABB97DDDD8C2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2CB082241E0A4D86F09F902B /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				86E10348DFB76BB2FA7655FF /* AppStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		31A69061AEC0ABB97DDDD8C2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FAD5225EB6E3F39176616B81 /* WhatDoYouActuallyFear.app */,
+				CCB6645F27338EA28F84FD9F /* WhatDoYouActuallyFearTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6C9F79AAAC90B65FDDFE9B80 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				D969FB381EBF0A81917E5784 /* EngineTests.swift */,
+				929636F4BDA94A487A7364A4 /* StoreTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		9CDFB890DFF6A3A439E7137D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				62D87F44161001967B2BBF94 /* Engine.swift */,
+				B0789E49B5530268ABFA4118 /* Fear.swift */,
+				CF08C38C9C453064BF68B806 /* FearLibrary.swift */,
+				547663A2E664D7C04433F033 /* Profile.swift */,
+				0133897223B495B8E6070F2E /* Questions.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		ADD9D08DC07495344BA7681A /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				C8AC6AA921516D08005DF109 /* ScreenshotRenderer.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		BD66EA5C82395972E182F24E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				65AE86789A57EFC2179C4D08 /* MainViews.swift */,
+				2B0AC3AF0F42303517E8AC28 /* OnboardingViews.swift */,
+				3F40C200FA08589D0D177E34 /* SettingsAndFeedback.swift */,
+				57AA65AA3194B50BDD308DA9 /* Theme.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6F71622F58AEC0BF48BB9A51 /* WhatDoYouActuallyFear */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D627EDC837088E3BBFBC6A7C /* Build configuration list for PBXNativeTarget "WhatDoYouActuallyFear" */;
+			buildPhases = (
+				E202DB5AC0A286CB742B72BF /* Sources */,
+				56E1E891F2E53804554BB64B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WhatDoYouActuallyFear;
+			packageProductDependencies = (
+			);
+			productName = WhatDoYouActuallyFear;
+			productReference = FAD5225EB6E3F39176616B81 /* WhatDoYouActuallyFear.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F266AEA1DE45B58744E84FCE /* WhatDoYouActuallyFearTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8ECC098E22A3FA6BACDEF421 /* Build configuration list for PBXNativeTarget "WhatDoYouActuallyFearTests" */;
+			buildPhases = (
+				574FB8E1274BA6992FFEECE9 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A3FA12DE6DD14A39768E9E8E /* PBXTargetDependency */,
+			);
+			name = WhatDoYouActuallyFearTests;
+			packageProductDependencies = (
+			);
+			productName = WhatDoYouActuallyFearTests;
+			productReference = CCB6645F27338EA28F84FD9F /* WhatDoYouActuallyFearTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7182EEFC47757896F1A0CEB1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					6F71622F58AEC0BF48BB9A51 = {
+						ProvisioningStyle = Manual;
+					};
+					F266AEA1DE45B58744E84FCE = {
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = D03ED9FC7EFAD1862048F5B1 /* Build configuration list for PBXProject "WhatDoYouActuallyFear" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 2AEAD895DD38C8727B642DF0;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 31A69061AEC0ABB97DDDD8C2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6F71622F58AEC0BF48BB9A51 /* WhatDoYouActuallyFear */,
+				F266AEA1DE45B58744E84FCE /* WhatDoYouActuallyFearTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		56E1E891F2E53804554BB64B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F8BD8F5A71A960CA9E5586E9 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		574FB8E1274BA6992FFEECE9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28B031F437E872E620408DF9 /* EngineTests.swift in Sources */,
+				D014199C820C276957DE68B4 /* StoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E202DB5AC0A286CB742B72BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD3083165D9F699A9E1FEC57 /* AppStore.swift in Sources */,
+				445959B1A13C4AABD6F8D6FC /* Engine.swift in Sources */,
+				D1C4B43430DDC47DDE35C0B3 /* Fear.swift in Sources */,
+				AA9C368A15E35904D180A4A1 /* FearLibrary.swift in Sources */,
+				4294965D42F6A3456BA54D8F /* MainViews.swift in Sources */,
+				96A5B591449B653E988F742D /* OnboardingViews.swift in Sources */,
+				EDDE27A3BF62A64EF386F9D0 /* Profile.swift in Sources */,
+				78535BF93E07BB13D2256500 /* Questions.swift in Sources */,
+				116C6485A84CC3059C423FC5 /* ScreenshotRenderer.swift in Sources */,
+				A7C580BC9C94E2B163508300 /* SettingsAndFeedback.swift in Sources */,
+				D26F81A8595D4E68804D8A76 /* Theme.swift in Sources */,
+				DBA760589B7CE2C641076EA0 /* WhatDoYouActuallyFearApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A3FA12DE6DD14A39768E9E8E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6F71622F58AEC0BF48BB9A51 /* WhatDoYouActuallyFear */;
+			targetProxy = 578460EA91B856CDB7900EB3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		136BF77CAD69CE24CF3E1632 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "What Do You Actually Fear";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.amalmehta.WhatDoYouActuallyFear;
+				PRODUCT_MODULE_NAME = WhatDoYouActuallyFear;
+				PRODUCT_NAME = "What Do You Actually Fear";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		699ECEC570D4AF58FF6CB497 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		6DF14DB553C22361E0B742DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "What Do You Actually Fear";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.amalmehta.WhatDoYouActuallyFear;
+				PRODUCT_MODULE_NAME = WhatDoYouActuallyFear;
+				PRODUCT_NAME = "What Do You Actually Fear";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		BA7BE02E69290DF10794F359 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D7B1458858E6934C10E7B894 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.amalmehta.WhatDoYouActuallyFearTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/What Do You Actually Fear.app/Contents/MacOS/What Do You Actually Fear";
+			};
+			name = Release;
+		};
+		EE918F6E52A16F886C7B49E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.amalmehta.WhatDoYouActuallyFearTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/What Do You Actually Fear.app/Contents/MacOS/What Do You Actually Fear";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8ECC098E22A3FA6BACDEF421 /* Build configuration list for PBXNativeTarget "WhatDoYouActuallyFearTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE918F6E52A16F886C7B49E9 /* Debug */,
+				D7B1458858E6934C10E7B894 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D03ED9FC7EFAD1862048F5B1 /* Build configuration list for PBXProject "WhatDoYouActuallyFear" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA7BE02E69290DF10794F359 /* Debug */,
+				699ECEC570D4AF58FF6CB497 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D627EDC837088E3BBFBC6A7C /* Build configuration list for PBXNativeTarget "WhatDoYouActuallyFear" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				136BF77CAD69CE24CF3E1632 /* Debug */,
+				6DF14DB553C22361E0B742DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7182EEFC47757896F1A0CEB1 /* Project object */;
+}
