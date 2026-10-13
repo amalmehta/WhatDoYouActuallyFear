@@ -77,6 +77,7 @@ The website is a single-page React app with no backend. `App.tsx` holds state in
 | `web/src/model/*` | The website's content copy, engine, reducer, theme and demo data. |
 | `web/src/views/*` | The website's screens: onboarding, main shell, quest dialog, settings and feedback. |
 | `.github/workflows/pages.yml` | On every push to `main`: `npm ci`, run the tests, build, and deploy to Pages. |
+| `.github/workflows/mac-tests.yml` | When the Mac app's files change (push to `main` or a pull request), or on demand: build on a `macos-26` runner, then run the unit tests and the UI tests. Uploads the `.xcresult` bundles if anything fails. |
 
 ## Main flows
 
@@ -134,7 +135,9 @@ UI tests (`UITests/`, XCUITest) launch the real app with `-UITestDataDirectory` 
 - **Reopening:** saved progress opens on the Quest Board with the accepted quest kept. **Back** (⌘[) keeps the earlier answer. **⌘,** opens Settings with Export and Import.
 - **Import and export:** pasting a website progress file with ⌘V imports it after confirmation; pasting other JSON explains why it can't. The welcome-screen link opens the system open panel, and File → Export Progress… opens the save panel (both cancelled, so nothing is written outside the temporary folder). **Erase everything** returns to the welcome screen and deletes the profile.
 
-The tests wait for each statement before answering it, and fill text fields by pasting, because typing quickly into SwiftUI controls can drop keys. Drag and drop of a file isn't covered: XCUITest can't drag files in from Finder. That path is covered by the website's tests and the shared import code.
+The tests wait for each statement before answering it, and fill text fields by pasting, because typing quickly into SwiftUI controls can drop keys. Both the unit and UI tests also run in GitHub Actions (`mac-tests.yml`) on a hosted `macos-26` runner with Xcode 26.6. The whole job takes about 4 minutes.
+
+Drag and drop of a file isn't covered: XCUITest can't drag files in from Finder. That path is covered by the website's tests and the shared import code.
 
 `npm --prefix web test` runs 36 Vitest cases:
 
@@ -158,3 +161,4 @@ Visual check: the `--screenshots` renders in `docs/images/` (light and dark). Th
 - The website and the Mac app keep separate progress until you export from one and import into the other.
 - Rounding differs for a relief value that ends in exactly .x5. For example, an average of 3.25 shows as "3.2" in the Mac app (printf rounds half to even) and "3.3" on the website (JavaScript's `toFixed`).
 - In the browser, ⌘, may be taken by the browser itself. The gear button always works.
+- The Mac UI tests don't cover dropping a file onto the window, or actually choosing a file in the open or save panel (they open the panels and cancel). They need a desktop session, which GitHub's hosted macOS runners provide.

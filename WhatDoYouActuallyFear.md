@@ -85,6 +85,8 @@ CHANGELOG:
 - 2026-10-13 — added Export / Import Progress to both apps (one shared file format)
 - 2026-10-13 — added a phone screenshot of the website to the README, with a script to recapture it
 - 2026-10-13 — added a UI test target for the Mac app (9 XCUITests against a temporary data folder); moved Erase up in Settings so it stays on screen
+- 2026-10-13 — Mac unit and UI tests now run in GitHub Actions on a macOS runner
+- 2026-10-13 — changes now go through branches and pull requests instead of straight to main
 - 2026-09-15 — added meta-instruction: built-out applications include a small feedback tab
 - 2026-09-15 — added meta-instruction: no "Claude" attribution in commits, PRs, or branches
 - 2026-09-16 — added meta-instruction: always include a README when adding to GitHub
