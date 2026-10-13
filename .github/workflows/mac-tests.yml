@@ -1,0 +1,57 @@
+name: Mac app tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "App/**"
+      - "Tests/**"
+      - "UITests/**"
+      - "project.yml"
+      - "WhatDoYouActuallyFear.xcodeproj/**"
+      - ".github/workflows/mac-tests.yml"
+  pull_request:
+    paths:
+      - "App/**"
+      - "Tests/**"
+      - "UITests/**"
+      - "project.yml"
+      - "WhatDoYouActuallyFear.xcodeproj/**"
+      - ".github/workflows/mac-tests.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: mac-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  XCODEBUILD: xcodebuild -project WhatDoYouActuallyFear.xcodeproj -scheme WhatDoYouActuallyFear -destination platform=macOS -derivedDataPath build
+
+jobs:
+  test:
+    runs-on: macos-26
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show Xcode and screen
+        run: |
+          xcodebuild -version
+          system_profiler SPDisplaysDataType | grep -i resolution || true
+
+      - name: Build app and tests
+        run: $XCODEBUILD build-for-testing
+
+      - name: Unit tests
+        run: $XCODEBUILD test-without-building -only-testing:WhatDoYouActuallyFearTests -resultBundlePath build/UnitTests.xcresult
+
+      - name: UI tests
+        run: $XCODEBUILD test-without-building -only-testing:WhatDoYouActuallyFearUITests -resultBundlePath build/UITests.xcresult
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: build/*.xcresult
+          retention-days: 7
