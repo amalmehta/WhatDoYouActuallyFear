@@ -2,7 +2,7 @@
 
 ## What it is
 
-A native macOS SwiftUI app, fully offline. A questionnaire scores eleven fears, asks where the strongest ones came from, and builds a game plan from them: a root-cause exercise plus a graded exposure ladder for each fear, with XP, ranks and a final boss quest. Each quest is rated for predicted fear and actual fear, so the app can show how much less scary reality turned out to be.
+Two front ends with the same content and rules: a native macOS SwiftUI app and a React website on GitHub Pages. Both work offline and keep everything on the device. A questionnaire scores eleven fears, asks where the strongest ones came from, and builds a game plan from them: a root-cause exercise plus a graded exposure ladder for each fear, with XP, ranks and a final boss quest. Each quest is rated for predicted fear and actual fear, so the app can show how much less scary reality turned out to be.
 
 ## Architecture
 
@@ -44,6 +44,21 @@ flowchart TB
     MA --> UD
 ```
 
+### Website
+
+```mermaid
+flowchart LR
+    Swift[App/Model/*.swift] -->|npm run copy-content| Content[web/src/model/content.ts]
+    Swift -. parity test .-> Content
+    Content --> Engine[engine.ts<br/>port of Engine.swift]
+    Engine --> Views[React views]
+    Reducer[store.ts reducer] <--> Views
+    Reducer <--> LS[(localStorage)]
+    Repo[push to main] --> CI[GitHub Actions:<br/>test → build] --> Pages[GitHub Pages]
+```
+
+The website is a single-page React app with no backend. `App.tsx` holds state in a `useReducer` (`store.ts`, which mirrors `AppStore`) and saves the profile and settings to localStorage after every change. `engine.ts` is a line-for-line port of `Engine.swift`. Colors come from the same HSB formula, turned into CSS variables for light and dark. `?demo` loads the same sample profile as the Mac app's screenshot renderer and never saves.
+
 ## Components
 
 | Component | Job |
@@ -56,6 +71,11 @@ flowchart TB
 | Views | Onboarding screens, a three-page sidebar app, a quest sheet, Settings and Feedback. Content views (`QuestBoardContent`, `RevealContent`, …) are kept separate from their scroll containers so they can be rendered to PNG. |
 | `ScreenshotRenderer` | `--screenshots <dir>` renders the README images from sample data with `ImageRenderer`, then quits. |
 
+| `web/scripts/swift-content.mjs` | Parses the Swift content files. It's used to copy the content into `content.ts` and by the parity test. |
+| `web/src/model/*` | The website's content copy, engine, reducer, theme and demo data. |
+| `web/src/views/*` | The website's screens: onboarding, main shell, quest dialog, settings and feedback. |
+| `.github/workflows/pages.yml` | On every push to `main`: `npm ci`, run the tests, build, and deploy to Pages. |
+
 ## Main flows
 
 1. **Questionnaire.** `start()` creates a draft, keeping the previous area and goal. `answer(n)` records 0–4 and moves forward. After the last statement the phase becomes `.sources`. `sourceFears` is the current top three. `nextSource()` → `finishQuestionnaire()` copies the draft into the saved profile, carrying over earlier completions and accepted quests, saves it, and shows the results.
@@ -66,9 +86,14 @@ flowchart TB
 
 ## Where data lives
 
+Mac app:
+
+
 - `~/Library/Application Support/What Do You Actually Fear/Profile.json`: the whole `Profile`, as pretty-printed JSON with ISO-8601 dates (stored to the whole second, so what's in memory matches what reloads).
 - `.../Feedback.json`: an array of `FeedbackEntry`. **Erase everything** keeps it.
 - `UserDefaults`: `focusCount`, `showXP`, `appearance`.
+
+Website: localStorage keys `wdyaf.profile` (same shape as `Profile.json`), `wdyaf.settings` and `wdyaf.feedback`. If storage is blocked, a banner says progress won't be saved.
 
 ## Key decisions and trade-offs
 
@@ -82,6 +107,9 @@ flowchart TB
 | One JSON file, no database | Tiny data, easy to inspect and back up | No sync between Macs |
 | Colors from hue families, worked out in code | Related fears share a hue and differ in shade (hue ±0.025, saturation and brightness), with separate tuning for light and dark | Shades within a family are close by design; labels always go with them |
 | XcodeGen project | A readable `project.yml` instead of a hand-edited pbxproj | Needs `xcodegen` installed to change targets |
+| Website content is copied from the Swift, not shared | The Mac app stays untouched; the website stays a plain static build | Two copies. `copy-content` regenerates the web copy and the parity test (also run in CI) fails if they drift |
+| React + Vite on GitHub Pages, no backend | Free static hosting; answers never leave the browser | No accounts or sync; clearing site data erases progress |
+| Website feedback saved locally, with an optional GitHub issue | There's no server to send it to | Only feedback that people choose to post as an issue reaches the developer |
 | Swift 5 language mode, macOS 14+ | Uses `@Observable`, `SettingsLink` and `ContentUnavailableView` without Swift 6 strict-concurrency friction | Doesn't run on macOS 13 or earlier |
 
 ## Testing
@@ -90,6 +118,14 @@ flowchart TB
 
 - **EngineTests:** every fear has five ladder steps and at least two statements; question ids are unique; shades don't collide within a family; scores are 0% for all-zero answers and 100% for all-max answers; the right fear comes out on top for targeted answers; out-of-range answers are clamped; plan shape and focus clamping; the root quest follows the chosen source; unlocking order; boss unlocking; the boss uses your goal or a fallback; XP, ranks and average relief.
 - **StoreTests** (temporary folder): a fresh start; the full questionnaire saves and reloads identically; back navigation; accept, complete and undo persist; retake keeps the journal; erase plus feedback.
+
+`npm --prefix web test` runs 26 Vitest cases:
+
+- **parity:** families, fears, sources, life areas, the answer scale, questions and weights, and XP and ranks all match the Swift exactly.
+- **engine:** the same cases as EngineTests, plus color checks (every fear and source color is distinct in light and dark mode).
+- **app** (jsdom + Testing Library): the full questionnaire by clicks and number keys, then results, accept, complete, the journal and saving; reloading restores progress; back navigation keeps answers; Ctrl+, opens Settings, and the focus count, XP and theme apply; demo mode doesn't save; erase; feedback saves and builds the GitHub issue link.
+
+The website was also clicked through in a real browser (keyboard questionnaire, sources, results, the quest dialog) and checked at phone width for horizontal overflow.
 
 Visual check: the `--screenshots` renders in `docs/images/` (light and dark). The live UI (clicks, sheets, keyboard shortcuts) has not been click-tested yet: no UI test target exists, and the first build was verified through logic tests and rendered screens only.
 
@@ -101,4 +137,6 @@ Visual check: the `--screenshots` renders in `docs/images/` (light and dark). Th
 - No reminders, notifications, export or sync.
 - Feedback is saved locally and isn't sent anywhere.
 - The app is ad-hoc signed and not notarized, so on another Mac Gatekeeper will ask you to confirm the first time it opens (right-click → Open).
-- The website version hasn't been built yet. It's the next step after the Mac app.
+- The website and the Mac app don't share progress. Each keeps its own data.
+- Rounding differs for a relief value that ends in exactly .x5. For example, an average of 3.25 shows as "3.2" in the Mac app (printf rounds half to even) and "3.3" on the website (JavaScript's `toFixed`).
+- In the browser, ⌘, may be taken by the browser itself. The gear button always works.

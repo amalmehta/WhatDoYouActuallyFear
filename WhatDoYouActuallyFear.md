@@ -73,12 +73,14 @@ Decided without asking:
 - Settings: focus on 1–3 fears, XP on/off, theme, data folder, retake, erase. Feedback is saved locally to Feedback.json.
 - No file input, so there's no Upload, drop or paste (the file-input rule doesn't apply).
 - SwiftUI on macOS 14+, built with XcodeGen; data stored as JSON in Application Support.
-- The website is a separate, later step and hasn't been started.
+- Website (2026-10-13). Asked: React + Vite, hosted on GitHub Pages, quiz content copied into JS with a parity test. Decided: TypeScript; progress in localStorage; `?demo` shows sample data without saving; feedback is saved in the browser with an optional "Open as GitHub issue"; Settings via the gear button or ⌘, / Ctrl+,; deployed by a GitHub Actions workflow on every push to main.
 
 CHANGELOG:
 
 - 2026-10-12 — created
 - 2026-10-12 — built v1 Mac app (questionnaire, fear sources, quest plan, journal, settings, feedback), tests and docs; filled in open questions
+- 2026-10-13 — created GitHub repo (public) and pushed
+- 2026-10-13 — built the website (React + Vite) with content parity tests and GitHub Pages deploy
 - 2026-09-15 — added meta-instruction: built-out applications include a small feedback tab
 - 2026-09-15 — added meta-instruction: no "Claude" attribution in commits, PRs, or branches
 - 2026-09-16 — added meta-instruction: always include a README when adding to GitHub

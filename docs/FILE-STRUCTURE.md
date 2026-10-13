@@ -23,6 +23,31 @@ WhatDoYouActuallyFear/
 │   ├── Support/
 │   │   └── ScreenshotRenderer.swift Renders README images from sample data
 │   └── Assets.xcassets/             App icon
+├── web/                             The website (React + Vite + TypeScript)
+│   ├── index.html                   Page shell
+│   ├── vite.config.ts               Build config (base path /WhatDoYouActuallyFear/) and test setup
+│   ├── scripts/
+│   │   ├── swift-content.mjs        Reads the quiz content out of App/Model/*.swift
+│   │   └── copy-content.mjs         `npm run copy-content`: writes src/model/content.ts from the Swift
+│   ├── public/icon.png              Favicon
+│   └── src/
+│       ├── main.tsx                 Entry: injects theme colors, ?demo switch, renders App
+│       ├── App.tsx                  State (useReducer), saving, theme, ⌘, shortcut, dialogs
+│       ├── styles.css               Layout, light and dark tokens, phone layout
+│       ├── model/
+│       │   ├── content.ts           Copied quiz content (fears, questions, sources, XP rules)
+│       │   ├── types.ts             Shared types; Profile matches the Mac app's JSON
+│       │   ├── engine.ts            Port of Engine.swift
+│       │   ├── store.ts             Reducer, localStorage, feedback
+│       │   ├── theme.ts             Hue-family colors as CSS variables
+│       │   └── demo.ts              Sample profile for ?demo and screenshots
+│       ├── views/
+│       │   ├── Common.tsx           Store context, tags, bars, meter, modal
+│       │   ├── Onboarding.tsx       Welcome, area and goal, statements, sources, results
+│       │   ├── Main.tsx             Sidebar shell, Quest Board, quest dialog, Fear Profile, Journal
+│       │   └── SettingsFeedback.tsx Settings and feedback dialogs
+│       └── test/                    Parity, engine and full-UI tests (Vitest + Testing Library)
+├── .github/workflows/pages.yml      Tests, builds and deploys the website to GitHub Pages
 ├── Tests/
 │   ├── EngineTests.swift            Content integrity, scoring, plans, unlocking, XP and ranks
 │   └── StoreTests.swift             Full questionnaire flow, persistence, retake, erase, feedback
@@ -33,4 +58,4 @@ WhatDoYouActuallyFear/
     └── images/                      Screenshots and icon used by the README
 ```
 
-`build/` (Xcode output) and `.claude/` are git-ignored.
+`build/` (Xcode output), `web/node_modules/`, `web/dist/` and `.claude/` are git-ignored.

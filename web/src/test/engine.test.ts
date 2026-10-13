@@ -1,0 +1,119 @@
+// Mirrors the Mac app's EngineTests.swift.
+import { describe, expect, it } from "vitest";
+import { fears, questions, rules, sources } from "../model/content";
+import { averageRelief, emptyProfile, plan, rank, scores, status, topFears, xp, type Quest } from "../model/engine";
+import { fearColor, hsbToHsl, sourceColor } from "../model/theme";
+import type { Profile, QuestCompletion } from "../model/types";
+
+const sample = (): Profile => ({ ...emptyProfile(), answers: { q01: 4, q02: 4, q06: 3, q12: 2 } });
+const completion = (q: Quest, predicted = 5, actual = 3): QuestCompletion =>
+  ({ date: new Date().toISOString(), fear: q.fear, title: q.title, xp: q.xp, predicted, actual, note: "" });
+
+describe("content", () => {
+  it("every fear has a full ladder and at least two statements", () => {
+    for (const f of fears) {
+      expect(f.ladder).toHaveLength(rules.stepXP.length);
+      expect(questions.filter((q) => (q.weights[f.id] ?? 0) > 0).length).toBeGreaterThanOrEqual(2);
+    }
+    expect(new Set(questions.map((q) => q.id)).size).toBe(questions.length);
+  });
+
+  it("shades are unique within each family, and every color is distinct", () => {
+    for (const family of new Set(fears.map((f) => f.family))) {
+      const shades = fears.filter((f) => f.family === family).map((f) => f.shade);
+      expect(new Set(shades).size).toBe(shades.length);
+    }
+    for (const scheme of ["light", "dark"] as const) {
+      const colors = [...fears.map((f) => fearColor(f.id, scheme)), ...sources.filter((s) => s.group !== "unknown").map((s) => sourceColor(s.id, scheme))];
+      expect(new Set(colors).size).toBe(colors.length);
+    }
+  });
+
+  it("converts HSB to HSL", () => {
+    expect(hsbToHsl(0, 1, 1)).toBe("hsl(0.0 100.0% 50.0%)");
+    expect(hsbToHsl(0, 0, 1)).toBe("hsl(0.0 0.0% 100.0%)");
+  });
+});
+
+describe("scoring", () => {
+  it("all-zero answers score zero and keep library order", () => {
+    const s = scores({});
+    expect(s.every((x) => x.percent === 0)).toBe(true);
+    expect(s.map((x) => x.fear)).toEqual(fears.map((f) => f.id));
+  });
+
+  it("all-max answers score 100", () => {
+    const answers = Object.fromEntries(questions.map((q) => [q.id, 4]));
+    expect(scores(answers).every((x) => x.percent === 100)).toBe(true);
+  });
+
+  it("answers point to the right fear", () => {
+    expect(topFears({ q12: 4, q13: 4 }, 1)).toEqual(["wrongChoice"]);
+    expect(topFears({ q08: 4, q09: 4 }, 1)).toEqual(["conflict"]);
+  });
+
+  it("clamps out-of-range answers", () => {
+    const top = scores({ q02: 99 })[0];
+    expect(top.fear).toBe("failure");
+    expect(top.percent).toBeLessThanOrEqual(100);
+  });
+});
+
+describe("plan and progress", () => {
+  it("builds a root quest plus five steps per fear, clamped to 1–3 fears", () => {
+    for (const n of [1, 2, 3]) {
+      const p = plan(sample(), n);
+      expect(p.fears).toHaveLength(n);
+      for (const fp of p.fears) {
+        expect(fp.quests).toHaveLength(6);
+        expect(fp.quests[0].kind.type).toBe("source");
+      }
+    }
+    expect(plan(sample(), 9).fears).toHaveLength(3);
+    expect(plan(sample(), 0).fears).toHaveLength(1);
+  });
+
+  it("root quest follows the chosen source", () => {
+    const profile = sample();
+    const top = topFears(profile.answers, 1)[0];
+    profile.sources[top] = "modelled";
+    expect(plan(profile, 1).fears[0].quests[0].title).toBe(sources.find((s) => s.id === "modelled")!.exercise.title);
+    delete profile.sources[top];
+    expect(plan(profile, 1).fears[0].quests[0].title).toBe(sources.find((s) => s.id === "unsure")!.exercise.title);
+  });
+
+  it("unlocks in order; boss needs one full ladder", () => {
+    const profile = sample();
+    const p = plan(profile, 2);
+    const quests = p.fears[0].quests;
+    expect(status(quests[0], p, profile)).toEqual({ type: "available" });
+    expect(status(quests[1], p, profile)).toEqual({ type: "locked" });
+    expect(status(p.boss!, p, profile)).toEqual({ type: "locked" });
+    profile.accepted[quests[0].id] = 7;
+    expect(status(quests[0], p, profile)).toEqual({ type: "accepted", predicted: 7 });
+    for (const q of quests) profile.completions[q.id] = completion(q);
+    expect(status(p.boss!, p, profile)).toEqual({ type: "available" });
+  });
+
+  it("boss uses the goal or falls back", () => {
+    const profile = sample();
+    profile.goal = "  Start the podcast  ";
+    expect(plan(profile, 1).boss?.title).toBe("Start the podcast");
+    profile.goal = " ";
+    expect(plan(profile, 1).boss?.title).toBe("The step you've been avoiding");
+  });
+
+  it("XP, ranks and relief", () => {
+    expect(rank(0).title).toBe("Frozen");
+    expect(rank(49).next).toBe(50);
+    expect(rank(150).title).toBe("Stepping Out");
+    expect(rank(5000).next).toBeNull();
+    const profile = sample();
+    expect(averageRelief(profile)).toBeNull();
+    const quests = plan(profile, 1).fears[0].quests;
+    profile.completions[quests[0].id] = completion(quests[0], 8, 4);
+    profile.completions[quests[1].id] = completion(quests[1], 6, 4);
+    expect(xp(profile)).toBe(quests[0].xp + quests[1].xp);
+    expect(averageRelief(profile)).toBe(3);
+  });
+});

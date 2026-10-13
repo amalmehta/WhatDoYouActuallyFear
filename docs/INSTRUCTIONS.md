@@ -36,10 +36,40 @@ xcodebuild -project WhatDoYouActuallyFear.xcodeproj -scheme WhatDoYouActuallyFea
 
 This renders the main screens with sample data, in light and dark mode, and quits.
 
+## Website
+
+Live at **https://amalmehta.github.io/WhatDoYouActuallyFear/** (add `?demo` to see sample answers; nothing is saved in demo mode).
+
+It's in `web/` (React + Vite + TypeScript) and needs Node 20 or later.
+
+```bash
+npm --prefix web install
+```
+
+```bash
+npm --prefix web run dev
+```
+
+```bash
+npm --prefix web test
+```
+
+```bash
+npm --prefix web run build
+```
+
+- **Deploying:** every push to `main` runs `.github/workflows/pages.yml`, which tests, builds and publishes `web/dist` to GitHub Pages.
+- **Changing quiz content:** edit the Swift files in `App/Model/`, then run `npm --prefix web run copy-content`. The parity test fails until the website's copy matches the Swift.
+- **Where website data lives:** in the browser's localStorage (`wdyaf.profile`, `wdyaf.settings`, `wdyaf.feedback`), only on that browser and device.
+- **Settings:** the gear button, or ⌘, / Ctrl+, (some browsers keep that shortcut for themselves).
+- **Feedback:** saved in the browser. You can also copy it, or open it as a prefilled GitHub issue.
+
 ## Using it
 
+The Mac app and the website work the same way.
+
 1. **Begin.** Pick the part of life where you feel most stuck, and (optionally) write what you'd do if you weren't afraid. That becomes your final boss.
-2. **Answer 22 statements** on a five-point scale. Press 1–5 to answer and ⌘[ to go back.
+2. **Answer 22 statements** on a five-point scale. Press 1–5 to answer, and go back with ⌘[ on the Mac or the Back link on the website.
 3. **Find the source.** For each of your top three fears, pick where it most likely started and, if you like, note your earliest memory of it.
 4. **See your results.** Your top fears, the belief underneath each one, and a chart of all eleven fears, colored by family.
 5. **Play the quest board.** Each fear has a *root* quest (working on where it came from) and five exposure steps, smallest to biggest. They unlock one at a time.
