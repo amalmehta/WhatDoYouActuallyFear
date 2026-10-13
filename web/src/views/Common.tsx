@@ -6,6 +6,12 @@ import type { FearId, SourceId } from "../model/types";
 
 export const StoreContext = createContext<{ state: State; dispatch: Dispatch<Action> } | null>(null);
 
+/** Export and import of the progress file, available from any screen. */
+export const TransferContext = createContext<{ openImport: () => void; exportNow: () => void }>({
+  openImport: () => {}, exportNow: () => {},
+});
+export const useTransfer = () => useContext(TransferContext);
+
 export function useStore() {
   const value = useContext(StoreContext);
   if (!value) throw new Error("useStore outside StoreContext");

@@ -13,15 +13,20 @@
 		445959B1A13C4AABD6F8D6FC /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D87F44161001967B2BBF94 /* Engine.swift */; };
 		78535BF93E07BB13D2256500 /* Questions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0133897223B495B8E6070F2E /* Questions.swift */; };
 		96A5B591449B653E988F742D /* OnboardingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0AC3AF0F42303517E8AC28 /* OnboardingViews.swift */; };
+		9D4781712C1076DDAF190678 /* Progress from Website.json in Resources */ = {isa = PBXBuildFile; fileRef = 62E9C7A7D668D67EBC907A9A /* Progress from Website.json */; };
 		A7C580BC9C94E2B163508300 /* SettingsAndFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F40C200FA08589D0D177E34 /* SettingsAndFeedback.swift */; };
 		AA9C368A15E35904D180A4A1 /* FearLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF08C38C9C453064BF68B806 /* FearLibrary.swift */; };
 		D014199C820C276957DE68B4 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929636F4BDA94A487A7364A4 /* StoreTests.swift */; };
 		D1C4B43430DDC47DDE35C0B3 /* Fear.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0789E49B5530268ABFA4118 /* Fear.swift */; };
 		D26F81A8595D4E68804D8A76 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA65AA3194B50BDD308DA9 /* Theme.swift */; };
+		D51D55EE8B4D95C703149247 /* Progress from Mac.json in Resources */ = {isa = PBXBuildFile; fileRef = 48A485AA7C3EF1F1335581F3 /* Progress from Mac.json */; };
 		DBA760589B7CE2C641076EA0 /* WhatDoYouActuallyFearApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA92A97A76434C8A94BEC99 /* WhatDoYouActuallyFearApp.swift */; };
 		DD3083165D9F699A9E1FEC57 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E10348DFB76BB2FA7655FF /* AppStore.swift */; };
+		E13705026170F8AD5C227065 /* ProgressFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12752F4A5844BF124F6CCB /* ProgressFileTests.swift */; };
 		EDDE27A3BF62A64EF386F9D0 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547663A2E664D7C04433F033 /* Profile.swift */; };
 		F8BD8F5A71A960CA9E5586E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D2898953165CD00D92D3737 /* Assets.xcassets */; };
+		FC8E007575796E3676BEC933 /* ProgressFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623A29C80628CAC5E47DA7EE /* ProgressFile.swift */; };
+		FCBDB813B032F034C59627E2 /* ProgressTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AB9C3A5AE4DA823C7FA293 /* ProgressTransfer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,9 +43,12 @@
 		0133897223B495B8E6070F2E /* Questions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questions.swift; sourceTree = "<group>"; };
 		2B0AC3AF0F42303517E8AC28 /* OnboardingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViews.swift; sourceTree = "<group>"; };
 		3F40C200FA08589D0D177E34 /* SettingsAndFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAndFeedback.swift; sourceTree = "<group>"; };
+		48A485AA7C3EF1F1335581F3 /* Progress from Mac.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Progress from Mac.json"; sourceTree = "<group>"; };
 		547663A2E664D7C04433F033 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		57AA65AA3194B50BDD308DA9 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		623A29C80628CAC5E47DA7EE /* ProgressFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressFile.swift; sourceTree = "<group>"; };
 		62D87F44161001967B2BBF94 /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
+		62E9C7A7D668D67EBC907A9A /* Progress from Website.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Progress from Website.json"; sourceTree = "<group>"; };
 		65AE86789A57EFC2179C4D08 /* MainViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViews.swift; sourceTree = "<group>"; };
 		7D2898953165CD00D92D3737 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		86E10348DFB76BB2FA7655FF /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
@@ -50,7 +58,9 @@
 		C8AC6AA921516D08005DF109 /* ScreenshotRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotRenderer.swift; sourceTree = "<group>"; };
 		CCB6645F27338EA28F84FD9F /* WhatDoYouActuallyFearTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhatDoYouActuallyFearTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF08C38C9C453064BF68B806 /* FearLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FearLibrary.swift; sourceTree = "<group>"; };
+		D3AB9C3A5AE4DA823C7FA293 /* ProgressTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTransfer.swift; sourceTree = "<group>"; };
 		D969FB381EBF0A81917E5784 /* EngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTests.swift; sourceTree = "<group>"; };
+		EC12752F4A5844BF124F6CCB /* ProgressFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressFileTests.swift; sourceTree = "<group>"; };
 		FAD5225EB6E3F39176616B81 /* WhatDoYouActuallyFear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatDoYouActuallyFear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -98,9 +108,20 @@
 			isa = PBXGroup;
 			children = (
 				D969FB381EBF0A81917E5784 /* EngineTests.swift */,
+				EC12752F4A5844BF124F6CCB /* ProgressFileTests.swift */,
 				929636F4BDA94A487A7364A4 /* StoreTests.swift */,
+				98ADE3B79189C3861BA5ABC2 /* Fixtures */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		98ADE3B79189C3861BA5ABC2 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				48A485AA7C3EF1F1335581F3 /* Progress from Mac.json */,
+				62E9C7A7D668D67EBC907A9A /* Progress from Website.json */,
+			);
+			path = Fixtures;
 			sourceTree = "<group>";
 		};
 		9CDFB890DFF6A3A439E7137D /* Model */ = {
@@ -110,6 +131,7 @@
 				B0789E49B5530268ABFA4118 /* Fear.swift */,
 				CF08C38C9C453064BF68B806 /* FearLibrary.swift */,
 				547663A2E664D7C04433F033 /* Profile.swift */,
+				623A29C80628CAC5E47DA7EE /* ProgressFile.swift */,
 				0133897223B495B8E6070F2E /* Questions.swift */,
 			);
 			path = Model;
@@ -128,6 +150,7 @@
 			children = (
 				65AE86789A57EFC2179C4D08 /* MainViews.swift */,
 				2B0AC3AF0F42303517E8AC28 /* OnboardingViews.swift */,
+				D3AB9C3A5AE4DA823C7FA293 /* ProgressTransfer.swift */,
 				3F40C200FA08589D0D177E34 /* SettingsAndFeedback.swift */,
 				57AA65AA3194B50BDD308DA9 /* Theme.swift */,
 			);
@@ -160,6 +183,7 @@
 			buildConfigurationList = 8ECC098E22A3FA6BACDEF421 /* Build configuration list for PBXNativeTarget "WhatDoYouActuallyFearTests" */;
 			buildPhases = (
 				574FB8E1274BA6992FFEECE9 /* Sources */,
+				9EF59A407888CEA75B3117FE /* Resources */,
 			);
 			buildRules = (
 			);
@@ -219,6 +243,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9EF59A407888CEA75B3117FE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D51D55EE8B4D95C703149247 /* Progress from Mac.json in Resources */,
+				9D4781712C1076DDAF190678 /* Progress from Website.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -227,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28B031F437E872E620408DF9 /* EngineTests.swift in Sources */,
+				E13705026170F8AD5C227065 /* ProgressFileTests.swift in Sources */,
 				D014199C820C276957DE68B4 /* StoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,6 +276,8 @@
 				4294965D42F6A3456BA54D8F /* MainViews.swift in Sources */,
 				96A5B591449B653E988F742D /* OnboardingViews.swift in Sources */,
 				EDDE27A3BF62A64EF386F9D0 /* Profile.swift in Sources */,
+				FC8E007575796E3676BEC933 /* ProgressFile.swift in Sources */,
+				FCBDB813B032F034C59627E2 /* ProgressTransfer.swift in Sources */,
 				78535BF93E07BB13D2256500 /* Questions.swift in Sources */,
 				116C6485A84CC3059C423FC5 /* ScreenshotRenderer.swift in Sources */,
 				A7C580BC9C94E2B163508300 /* SettingsAndFeedback.swift in Sources */,

@@ -75,7 +75,8 @@ export type Action =
   | { type: "complete"; quest: Quest; actual: number; note: string }
   | { type: "undo"; quest: Quest }
   | { type: "settings"; settings: Partial<Settings> }
-  | { type: "erase" };
+  | { type: "erase" }
+  | { type: "import"; profile: Profile };
 
 export const sourceFears = (state: State) => topFears(state.draft.answers);
 
@@ -154,6 +155,9 @@ export function reducer(state: State, action: Action): State {
     }
     case "settings":
       return { ...state, settings: { ...state.settings, ...action.settings } };
+    case "import":
+      // Replaces answers, quests and journal. Leaves demo mode so the imported progress is saved.
+      return { ...state, profile: action.profile, page: "board", phase: "main", demo: false };
     case "erase":
       return { ...state, profile: null, draft: emptyProfile(), page: "board", phase: "welcome", demo: false };
   }

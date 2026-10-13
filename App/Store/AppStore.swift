@@ -27,6 +27,10 @@ final class AppStore {
     var questionIndex = 0
     var sourceIndex = 0
     var lastSaveError: String?
+    /// Set by menu commands; the main window opens the file panel.
+    var transferRequest: TransferRequest?
+
+    enum TransferRequest { case importFile, exportFile }
 
     let dataDirectory: URL
     var profileURL: URL { dataDirectory.appendingPathComponent("Profile.json") }
@@ -126,6 +130,21 @@ final class AppStore {
         save()
     }
 
+    // MARK: Import and export
+
+    /// Reads a progress file without changing anything, so it can be confirmed first.
+    func preview(_ data: Data) throws -> ImportPreview {
+        ImportPreview(profile: try ProgressFile.decode(data))
+    }
+
+    /// Replaces the current answers, quests and journal with an imported profile.
+    func importProfile(_ imported: Profile) {
+        profile = imported
+        save()
+        page = .board
+        phase = .main
+    }
+
     // MARK: Data
 
     func eraseEverything() {
@@ -160,17 +179,12 @@ final class AppStore {
 
     private static func load<T: Decodable>(_ type: T.Type, from url: URL) -> T? {
         guard let data = try? Data(contentsOf: url) else { return nil }
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        return try? decoder.decode(type, from: data)
+        return try? ProgressFile.decoder.decode(type, from: data)
     }
 
     private static func write<T: Encodable>(_ value: T, to url: URL) throws {
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        try encoder.encode(value).write(to: url, options: .atomic)
+        try ProgressFile.encoder.encode(value).write(to: url, options: .atomic)
     }
 }
 

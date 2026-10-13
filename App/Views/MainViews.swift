@@ -3,6 +3,8 @@ import SwiftUI
 struct RootView: View {
     @Environment(AppStore.self) private var store
     @AppStorage(SettingsKey.appearance) private var appearance = Appearance.system.rawValue
+    @State private var showImporter = false
+    @State private var showExporter = false
 
     var body: some View {
         Group {
@@ -15,6 +17,15 @@ struct RootView: View {
         .frame(minWidth: 920, minHeight: 660)
         .onAppear { (Appearance(rawValue: appearance) ?? .system).apply() }
         .onChange(of: appearance) { _, new in (Appearance(rawValue: new) ?? .system).apply() }
+        .modifier(ProgressTransfer(showImporter: $showImporter, showExporter: $showExporter, acceptsDropAndPaste: true))
+        .onChange(of: store.transferRequest) { _, request in
+            switch request {
+            case .importFile: showImporter = true
+            case .exportFile: showExporter = store.profile != nil
+            case nil: break
+            }
+            store.transferRequest = nil
+        }
     }
 }
 
@@ -49,6 +60,15 @@ struct MainView: View {
         }
         .navigationTitle(store.page.rawValue)
         .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    Button("Export Progress…") { store.transferRequest = .exportFile }
+                    Button("Import Progress…") { store.transferRequest = .importFile }
+                } label: {
+                    Label("Progress File", systemImage: "arrow.up.arrow.down.square")
+                }
+                .help("Export or import your progress (also works by dropping or pasting a file)")
+            }
             ToolbarItem(placement: .primaryAction) {
                 SettingsLink { Label("Settings", systemImage: "gearshape") }
                     .help("Settings (⌘,)")

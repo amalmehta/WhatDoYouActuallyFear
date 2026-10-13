@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { saveFeedback } from "../model/store";
-import { Modal, useStore } from "./Common";
+import { Modal, useStore, useTransfer } from "./Common";
 
 /** All preferences in one place (gear button, or ⌘, / Ctrl+,). */
 export function SettingsDialog({ onClose }: { onClose: () => void }) {
   const { state, dispatch } = useStore();
+  const transfer = useTransfer();
   const [confirmErase, setConfirmErase] = useState(false);
   const { settings } = state;
   return (
@@ -41,6 +42,13 @@ export function SettingsDialog({ onClose }: { onClose: () => void }) {
         <legend>Your data</legend>
         <p className="muted small">
           {state.demo ? "Sample data: nothing is saved." : "Saved in this browser only. Nothing is sent anywhere."}
+        </p>
+        <div className="actions left">
+          <button className="secondary" disabled={!state.profile} onClick={transfer.exportNow}>⇩ Export progress</button>
+          <button className="secondary" onClick={() => { onClose(); transfer.openImport(); }}>⇧ Import progress…</button>
+        </div>
+        <p className="muted small">
+          A progress file works in both this website and the Mac app. You can also drop one anywhere on the page, or paste it.
         </p>
         <div className="actions left">
           <button className="secondary" disabled={!state.profile} onClick={() => { dispatch({ type: "start" }); onClose(); }}>

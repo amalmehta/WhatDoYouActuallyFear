@@ -14,6 +14,13 @@ struct WhatDoYouActuallyFearApp: App {
         .defaultSize(width: 1040, height: 760)
         .commands {
             CommandGroup(replacing: .newItem) {}
+            CommandGroup(replacing: .importExport) {
+                Button("Import Progress…") { store.transferRequest = .importFile }
+                    .keyboardShortcut("o")
+                Button("Export Progress…") { store.transferRequest = .exportFile }
+                    .keyboardShortcut("e")
+                    .disabled(store.profile == nil)
+            }
             CommandGroup(after: .appSettings) {
                 Button("Retake the Questionnaire") { store.start() }
                     .disabled(store.profile == nil)

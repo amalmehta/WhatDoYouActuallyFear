@@ -1,0 +1,51 @@
+{
+  "accepted": {
+    "failure.step1": 6
+  },
+  "answers": {
+    "q01": 4,
+    "q02": 3,
+    "q03": 1,
+    "q04": 0,
+    "q05": 2,
+    "q06": 4,
+    "q07": 3,
+    "q08": 1,
+    "q09": 0,
+    "q10": 2,
+    "q11": 4,
+    "q12": 3,
+    "q13": 1,
+    "q14": 0,
+    "q15": 2,
+    "q16": 4,
+    "q17": 3,
+    "q18": 1,
+    "q19": 0,
+    "q20": 2,
+    "q21": 4,
+    "q22": 3
+  },
+  "completions": {
+    "failure.source": {
+      "actual": 3,
+      "date": "2026-10-12T10:13:20Z",
+      "fear": "failure",
+      "note": "Wrote it, \"cried\" a bit, felt lighter.",
+      "predicted": 7,
+      "title": "Answer the old critic",
+      "xp": 30
+    }
+  },
+  "createdAt": "2026-10-11T06:26:40Z",
+  "goal": "Show my paintings",
+  "lifeArea": "creativity",
+  "sourceNotes": {
+    "failure": "Piano lessons, age 9"
+  },
+  "sources": {
+    "beingLeft": "comparison",
+    "failure": "criticism",
+    "judgment": "unsure"
+  }
+}

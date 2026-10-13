@@ -78,12 +78,18 @@ The Mac app and the website work the same way.
    - You earn XP and ranks (Frozen → Stirring → Stepping Out → Brave → Bold → Fear Facer), and the header shows how much less scary reality has been than you expected.
 6. **Final boss.** It unlocks once you finish every quest for any one fear.
 
+**Moving your progress** (between browsers, or between the website and the Mac app):
+
+- **Export:** Mac app: File → Export Progress… (⌘E), the toolbar's progress-file menu, or Settings. Website: **Export progress** in the sidebar or Settings. Either one saves `What Do You Actually Fear Progress.json`.
+- **Import:** Mac app: File → Import Progress… (⌘O), the toolbar menu, Settings, or "Have a progress file? Import it…" on the welcome screen. Website: **Import progress…** in the sidebar or Settings, or the welcome-screen link. In both, you can also drop the file anywhere on the window, or paste it (or its text) with ⌘V when you're not typing in a field.
+- You'll see what's in the file (date, top fear, quests done) first. If you already have progress, it asks before replacing your answers, quests and journal.
+
 Other screens:
 
 - **Fear Profile:** how each fear keeps you stuck, the belief underneath it, a reframe, and where it started. Use the toolbar button to retake the questionnaire. Your journal and progress are kept.
 - **Journal:** every quest you've finished, with what you feared, what you felt, and your notes.
 - **Feedback** (bottom of the sidebar): saves a note to `Feedback.json` in the data folder.
-- **Settings** (⌘, or the gear): how many fears to focus on (1–3), show or hide XP and ranks, the theme (light, dark or system), show the data folder, retake, or erase everything.
+- **Settings** (⌘, or the gear): how many fears to focus on (1–3), show or hide XP and ranks, the theme (light, dark or system), export or import progress, show the data folder, retake, or erase everything.
 
 ## Where your data lives
 

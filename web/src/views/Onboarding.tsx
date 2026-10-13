@@ -3,7 +3,7 @@ import { lifeAreas, questions, scale, sources } from "../model/content";
 import { fearInfo, lifeAreaTitle, plan, scores } from "../model/engine";
 import { sourceFears } from "../model/store";
 import type { Profile } from "../model/types";
-import { FamilyLegend, FearBars, FearTag, isTyping, Meter, SourceTag, useStore } from "./Common";
+import { FamilyLegend, FearBars, FearTag, isTyping, Meter, SourceTag, useStore, useTransfer } from "./Common";
 
 const areaIcons: Record<string, string> = {
   career: "💼", relationships: "❤️", friendships: "👥", health: "🚶", creativity: "🎨", money: "💵", purpose: "🧭",
@@ -24,6 +24,7 @@ export function Onboarding() {
 
 function Welcome() {
   const { dispatch } = useStore();
+  const transfer = useTransfer();
   return (
     <main className="center welcome">
       <div className="flame" aria-hidden>🔥</div>
@@ -35,6 +36,9 @@ function Welcome() {
       <button className="primary large" onClick={() => dispatch({ type: "start" })} autoFocus>Begin</button>
       <p className="muted small">🔒 Everything stays in this browser.</p>
       <p className="small"><a href="?demo">See a demo with sample answers</a></p>
+      <p className="small">
+        <button className="link import-link" onClick={transfer.openImport}>Have a progress file? Import it…</button>
+      </p>
     </main>
   );
 }

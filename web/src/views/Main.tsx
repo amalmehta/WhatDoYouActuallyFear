@@ -3,7 +3,7 @@ import { rules } from "../model/content";
 import { averageRelief, fearInfo, plan, rank, scores, sourceInfo, status, xp, type Quest, type QuestStatus } from "../model/engine";
 import type { Page } from "../model/store";
 import type { Profile } from "../model/types";
-import { FamilyLegend, FearBars, FearTag, Meter, Modal, SourceTag, useStore } from "./Common";
+import { FamilyLegend, FearBars, FearTag, Meter, Modal, SourceTag, useStore, useTransfer } from "./Common";
 
 const pages: { id: Page; title: string; icon: string }[] = [
   { id: "board", title: "Quest Board", icon: "⚑" },
@@ -13,6 +13,7 @@ const pages: { id: Page; title: string; icon: string }[] = [
 
 export function MainShell({ onSettings, onFeedback }: { onSettings: () => void; onFeedback: () => void }) {
   const { state, dispatch } = useStore();
+  const transfer = useTransfer();
   return (
     <div className="shell">
       <nav className="sidebar" aria-label="Pages">
@@ -25,6 +26,8 @@ export function MainShell({ onSettings, onFeedback }: { onSettings: () => void; 
           </button>
         ))}
         <span className="spacer" />
+        <button className="nav-item subtle" onClick={transfer.exportNow}>⇩ Export progress</button>
+        <button className="nav-item subtle" onClick={transfer.openImport}>⇧ Import progress…</button>
         <button className="nav-item subtle" onClick={onFeedback}>💬 Feedback</button>
       </nav>
       <div className="content">

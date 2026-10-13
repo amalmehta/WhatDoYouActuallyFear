@@ -69,6 +69,8 @@ The website is a single-page React app with no backend. `App.tsx` holds state in
 | `Engine` | Pure, stateless logic. It turns answers into scores, scores and sources into a `GamePlan`, and works out each quest's status, total XP, rank and average relief. |
 | `AppStore` | Holds the flow phase, the draft questionnaire and the saved profile. It moves through the questionnaire, records quest actions, and reads and writes JSON. |
 | Views | Onboarding screens, a three-page sidebar app, a quest sheet, Settings and Feedback. Content views (`QuestBoardContent`, `RevealContent`, …) are kept separate from their scroll containers so they can be rendered to PNG. |
+| `ProgressFile` / `progress.ts` | The progress file shared by both apps: a `Profile` as JSON with sorted keys and whole-second ISO 8601 dates. Decoding checks every field and gives a plain-language reason when a file is rejected. The Mac decoder also accepts millisecond dates. |
+| `ProgressTransfer` (both apps) | Export and import: the file picker, the export download or save panel, dropping a file anywhere on the window, pasting with ⌘V when no text field is being edited, a preview, and confirmation before replacing. |
 | `ScreenshotRenderer` | `--screenshots <dir>` renders the README images from sample data with `ImageRenderer`, then quits. |
 
 | `web/scripts/swift-content.mjs` | Parses the Swift content files. It's used to copy the content into `content.ts` and by the parity test. |
@@ -83,6 +85,8 @@ The website is a single-page React app with no backend. `App.tsx` holds state in
 3. **Plan.** For the top *N* fears (Settings, 1–3), the plan has: a root quest (the chosen source's exercise, 30 XP), then five ladder steps (10/20/40/70/110 XP). It also has one boss quest (200 XP), built from the person's own goal, or a generic version if they left it blank.
 4. **Playing.** Quests in a fear's plan unlock one at a time. **Accept** stores a predicted fear rating. **I did it** stores a `QuestCompletion` with the predicted rating, the actual rating and a note. The boss unlocks once every quest for any one fear is done. **Undo** removes either record.
 5. **Retake.** Runs the questionnaire again. The journal and quest progress are kept, because quest ids are stable (`<fear>.source`, `<fear>.step3`, `boss`).
+
+6. **Export and import.** Export writes the current profile as the progress file. Import (from the picker, a drop or a paste) parses and validates the file, then shows a preview (date, top fear, quests done). Confirming replaces the profile, saves it, and opens the Quest Board. Cancel changes nothing. On the website, importing also ends demo mode, so the imported progress is saved.
 
 ## Where data lives
 
@@ -109,20 +113,24 @@ Website: localStorage keys `wdyaf.profile` (same shape as `Profile.json`), `wdya
 | XcodeGen project | A readable `project.yml` instead of a hand-edited pbxproj | Needs `xcodegen` installed to change targets |
 | Website content is copied from the Swift, not shared | The Mac app stays untouched; the website stays a plain static build | Two copies. `copy-content` regenerates the web copy and the parity test (also run in CI) fails if they drift |
 | React + Vite on GitHub Pages, no backend | Free static hosting; answers never leave the browser | No accounts or sync; clearing site data erases progress |
+| One progress-file format: the existing Profile JSON | Moves both ways between the website and the Mac app with no conversion; the Mac app's own `Profile.json` can be imported too | No version field yet. A future format change would need one |
+| Import replaces after confirmation (no merging) | Simple and predictable | Two separate journals can't be combined |
 | Website feedback saved locally, with an optional GitHub issue | There's no server to send it to | Only feedback that people choose to post as an issue reaches the developer |
 | Swift 5 language mode, macOS 14+ | Uses `@Observable`, `SettingsLink` and `ContentUnavailableView` without Swift 6 strict-concurrency friction | Doesn't run on macOS 13 or earlier |
 
 ## Testing
 
-`xcodebuild … test` runs 17 XCTest cases:
+`xcodebuild … test` runs 22 XCTest cases:
 
 - **EngineTests:** every fear has five ladder steps and at least two statements; question ids are unique; shades don't collide within a family; scores are 0% for all-zero answers and 100% for all-max answers; the right fear comes out on top for targeted answers; out-of-range answers are clamped; plan shape and focus clamping; the root quest follows the chosen source; unlocking order; boss unlocking; the boss uses your goal or a fallback; XP, ranks and average relief.
+- **ProgressFileTests:** `Tests/Fixtures/Progress from Mac.json` is byte-for-byte what this app writes; the website's export of the same profile decodes identically; millisecond dates are accepted; bad files are rejected with the right message; preview changes nothing; import replaces and persists. The website tests read the Mac fixture and write the website fixture, so each app is checked against the other's real output.
 - **StoreTests** (temporary folder): a fresh start; the full questionnaire saves and reloads identically; back navigation; accept, complete and undo persist; retake keeps the journal; erase plus feedback.
 
-`npm --prefix web test` runs 26 Vitest cases:
+`npm --prefix web test` runs 36 Vitest cases:
 
 - **parity:** families, fears, sources, life areas, the answer scale, questions and weights, and XP and ranks all match the Swift exactly.
 - **engine:** the same cases as EngineTests, plus color checks (every fear and source color is distinct in light and dark mode).
+- **progress** (10): reads the Mac app's file; writes exactly `Tests/Fixtures/Progress from Website.json`; round-trips and drops milliseconds; rejects bad files with clear reasons; import from the welcome-screen picker; replacing asks first and Cancel keeps progress; drop anywhere; paste works on the page but not inside a text field; a bad file shows an error; export from the sidebar.
 - **app** (jsdom + Testing Library): the full questionnaire by clicks and number keys, then results, accept, complete, the journal and saving; reloading restores progress; back navigation keeps answers; Ctrl+, opens Settings, and the focus count, XP and theme apply; demo mode doesn't save; erase; feedback saves and builds the GitHub issue link.
 
 The website was also clicked through in a real browser (keyboard questionnaire, sources, results, the quest dialog) and checked at phone width for horizontal overflow.
@@ -134,9 +142,9 @@ Visual check: the `--screenshots` renders in `docs/images/` (light and dark). Th
 - The content is written for general adult self-reflection. It isn't clinically validated and isn't a replacement for therapy.
 - English only. The 22 statements and 11 fears are fixed; there's no custom fear.
 - Quest steps aren't tailored to the chosen life area. The area shows up only in text and the fallback boss.
-- No reminders, notifications, export or sync.
+- No reminders, notifications or automatic sync. Moving progress means exporting and importing a file by hand.
 - Feedback is saved locally and isn't sent anywhere.
 - The app is ad-hoc signed and not notarized, so on another Mac Gatekeeper will ask you to confirm the first time it opens (right-click → Open).
-- The website and the Mac app don't share progress. Each keeps its own data.
+- The website and the Mac app keep separate progress until you export from one and import into the other.
 - Rounding differs for a relief value that ends in exactly .x5. For example, an average of 3.25 shows as "3.2" in the Mac app (printf rounds half to even) and "3.3" on the website (JavaScript's `toFixed`).
 - In the browser, ⌘, may be taken by the browser itself. The gear button always works.

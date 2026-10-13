@@ -47,6 +47,9 @@ struct WelcomeView: View {
             Label("Everything stays on this Mac.", systemImage: "lock")
                 .font(.callout)
                 .foregroundStyle(.secondary)
+            Button("Have a progress file? Import it…") { store.transferRequest = .importFile }
+                .buttonStyle(.link)
+                .font(.callout)
         }
         .padding(40)
     }

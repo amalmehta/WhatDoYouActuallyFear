@@ -4,6 +4,7 @@ import { initialState, persist, reducer } from "./model/store";
 import { isTyping, StoreContext } from "./views/Common";
 import { MainShell } from "./views/Main";
 import { Onboarding } from "./views/Onboarding";
+import { ProgressTransfer } from "./views/ProgressTransfer";
 import { FeedbackDialog, SettingsDialog } from "./views/SettingsFeedback";
 
 export function App({ demo = false }: { demo?: boolean }) {
@@ -39,18 +40,20 @@ export function App({ demo = false }: { demo?: boolean }) {
   const inMain = state.phase === "main" && state.profile;
   return (
     <StoreContext.Provider value={store}>
-      {inMain ? (
-        <MainShell onSettings={() => setSettingsOpen(true)} onFeedback={() => setFeedbackOpen(true)} />
-      ) : (
-        <>
-          <button className="icon-button floating-settings" onClick={() => setSettingsOpen(true)} aria-label="Settings" title="Settings (⌘, or Ctrl+,)">⚙︎</button>
-          <Onboarding />
-          <button className="feedback-tab" onClick={() => setFeedbackOpen(true)}>Feedback</button>
-        </>
-      )}
-      {saveFailed && <p className="save-warning" role="alert">This browser is blocking storage, so progress won't be saved.</p>}
-      {settingsOpen && <SettingsDialog onClose={() => setSettingsOpen(false)} />}
-      {feedbackOpen && <FeedbackDialog onClose={() => setFeedbackOpen(false)} />}
+      <ProgressTransfer>
+        {inMain ? (
+          <MainShell onSettings={() => setSettingsOpen(true)} onFeedback={() => setFeedbackOpen(true)} />
+        ) : (
+          <>
+            <button className="icon-button floating-settings" onClick={() => setSettingsOpen(true)} aria-label="Settings" title="Settings (⌘, or Ctrl+,)">⚙︎</button>
+            <Onboarding />
+            <button className="feedback-tab" onClick={() => setFeedbackOpen(true)}>Feedback</button>
+          </>
+        )}
+        {saveFailed && <p className="save-warning" role="alert">This browser is blocking storage, so progress won't be saved.</p>}
+        {settingsOpen && <SettingsDialog onClose={() => setSettingsOpen(false)} />}
+        {feedbackOpen && <FeedbackDialog onClose={() => setFeedbackOpen(false)} />}
+      </ProgressTransfer>
     </StoreContext.Provider>
   );
 }

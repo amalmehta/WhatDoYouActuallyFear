@@ -313,3 +313,13 @@ legend { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-
   .bar-label { text-align: left; grid-column: 1 / -1; }
   .narrow, .wide { padding-top: 56px; }
 }
+
+/* Import by drag and drop */
+.drop-overlay {
+  position: fixed; inset: 10px; z-index: 40; pointer-events: none;
+  border: 3px dashed var(--accent); border-radius: 16px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  display: flex; align-items: center; justify-content: center;
+}
+.drop-overlay span { background: var(--card); padding: 14px 20px; border-radius: 12px; font-size: 1.2rem; font-weight: 600; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); }
+.import-link { color: var(--accent); text-decoration: underline; padding: 0; }
