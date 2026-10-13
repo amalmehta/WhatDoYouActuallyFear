@@ -58,6 +58,7 @@ npm --prefix web test
 npm --prefix web run build
 ```
 
+- **Phone screenshot for the README:** `node web/scripts/phone-screenshot.mjs` captures the live demo at a 390×844 phone viewport (3×) with Chrome and saves `docs/images/website-phone.png`. You can pass a different URL and output path.
 - **Deploying:** every push to `main` runs `.github/workflows/pages.yml`, which tests, builds and publishes `web/dist` to GitHub Pages.
 - **Changing quiz content:** edit the Swift files in `App/Model/`, then run `npm --prefix web run copy-content`. The parity test fails until the website's copy matches the Swift.
 - **Where website data lives:** in the browser's localStorage (`wdyaf.profile`, `wdyaf.settings`, `wdyaf.feedback`), only on that browser and device.

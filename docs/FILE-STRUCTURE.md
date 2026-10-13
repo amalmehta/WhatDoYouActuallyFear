@@ -30,7 +30,8 @@ WhatDoYouActuallyFear/
 │   ├── vite.config.ts               Build config (base path /WhatDoYouActuallyFear/) and test setup
 │   ├── scripts/
 │   │   ├── swift-content.mjs        Reads the quiz content out of App/Model/*.swift
-│   │   └── copy-content.mjs         `npm run copy-content`: writes src/model/content.ts from the Swift
+│   │   ├── copy-content.mjs         `npm run copy-content`: writes src/model/content.ts from the Swift
+│   │   └── phone-screenshot.mjs     Captures the README's phone screenshot through Chrome device emulation
 │   ├── public/icon.png              Favicon
 │   └── src/
 │       ├── main.tsx                 Entry: injects theme colors, ?demo switch, renders App

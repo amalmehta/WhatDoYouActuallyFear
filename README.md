@@ -21,7 +21,13 @@ flowchart LR
     E --> F[Final boss:<br/>your goal]
 ```
 
-![The website's quest board](docs/images/website.png)
+<table>
+  <tr><th>On the web</th><th>On your phone</th></tr>
+  <tr>
+    <td><img src="docs/images/website.png" alt="The website's quest board on a desktop browser"></td>
+    <td width="240"><img src="docs/images/website-phone.png" width="220" alt="The website's quest board on a phone"></td>
+  </tr>
+</table>
 
 **Links**
 
