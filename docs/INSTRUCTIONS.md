@@ -42,6 +42,12 @@ Only the UI tests:
 xcodebuild -project WhatDoYouActuallyFear.xcodeproj -scheme WhatDoYouActuallyFear -derivedDataPath build test -only-testing:WhatDoYouActuallyFearUITests
 ```
 
+In GitHub Actions, `.github/workflows/mac-tests.yml` runs both on a macOS runner whenever the Mac app's files change in a push to `main` or a pull request. You can also start it by hand:
+
+```bash
+gh workflow run "Mac app tests"
+```
+
 The UI tests launch the app with `-UITestDataDirectory <temporary folder>`, so they never read or change your own progress. They borrow the clipboard (for the paste tests, and to fill text fields reliably) and put back what was there.
 
 ## Regenerate the README screenshots
