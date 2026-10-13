@@ -11,6 +11,7 @@
 		28B031F437E872E620408DF9 /* EngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D969FB381EBF0A81917E5784 /* EngineTests.swift */; };
 		4294965D42F6A3456BA54D8F /* MainViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AE86789A57EFC2179C4D08 /* MainViews.swift */; };
 		445959B1A13C4AABD6F8D6FC /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D87F44161001967B2BBF94 /* Engine.swift */; };
+		4C367362307E29814238EA55 /* AreaExamples.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0897B83CAF507A4450B89A /* AreaExamples.swift */; };
 		78535BF93E07BB13D2256500 /* Questions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0133897223B495B8E6070F2E /* Questions.swift */; };
 		96A5B591449B653E988F742D /* OnboardingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0AC3AF0F42303517E8AC28 /* OnboardingViews.swift */; };
 		9D4781712C1076DDAF190678 /* Progress from Website.json in Resources */ = {isa = PBXBuildFile; fileRef = 62E9C7A7D668D67EBC907A9A /* Progress from Website.json */; };
@@ -71,6 +72,7 @@
 		D969FB381EBF0A81917E5784 /* EngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTests.swift; sourceTree = "<group>"; };
 		EBC44B3F20B27DB558A885DB /* WhatDoYouActuallyFearUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhatDoYouActuallyFearUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC12752F4A5844BF124F6CCB /* ProgressFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressFileTests.swift; sourceTree = "<group>"; };
+		EF0897B83CAF507A4450B89A /* AreaExamples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaExamples.swift; sourceTree = "<group>"; };
 		FAD5225EB6E3F39176616B81 /* WhatDoYouActuallyFear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatDoYouActuallyFear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -147,6 +149,7 @@
 		9CDFB890DFF6A3A439E7137D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EF0897B83CAF507A4450B89A /* AreaExamples.swift */,
 				62D87F44161001967B2BBF94 /* Engine.swift */,
 				B0789E49B5530268ABFA4118 /* Fear.swift */,
 				CF08C38C9C453064BF68B806 /* FearLibrary.swift */,
@@ -321,6 +324,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD3083165D9F699A9E1FEC57 /* AppStore.swift in Sources */,
+				4C367362307E29814238EA55 /* AreaExamples.swift in Sources */,
 				445959B1A13C4AABD6F8D6FC /* Engine.swift in Sources */,
 				D1C4B43430DDC47DDE35C0B3 /* Fear.swift in Sources */,
 				AA9C368A15E35904D180A4A1 /* FearLibrary.swift in Sources */,

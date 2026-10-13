@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useRef, type Dispatch, type ReactNode } from "react";
 import { families } from "../model/content";
-import { fearInfo, sourceInfo, type FearScore } from "../model/engine";
 import type { Action, State } from "../model/store";
-import type { FearId, SourceId } from "../model/types";
+import { fearInfo, lifeAreaTitle, sourceInfo, type FearScore, type Quest } from "../model/engine";
+import type { FearId, LifeAreaId, SourceId } from "../model/types";
 
 export const StoreContext = createContext<{ state: State; dispatch: Dispatch<Action> } | null>(null);
 
@@ -16,6 +16,22 @@ export function useStore() {
   const value = useContext(StoreContext);
   if (!value) throw new Error("useStore outside StoreContext");
   return value;
+}
+
+export const areaIcons: Record<LifeAreaId, string> = {
+  career: "💼", relationships: "❤️", friendships: "👥", health: "🚶", creativity: "🎨", money: "💵", purpose: "🧭",
+};
+
+/** What a quest step looks like in the person's chosen life area. */
+export function ExampleLine({ quest }: { quest: Quest }) {
+  if (!quest.example) return null;
+  const { area, text } = quest.example;
+  return (
+    <p className="example" style={{ "--c": `var(--fear-${quest.fear})` } as React.CSSProperties}
+      title={`An example for ${lifeAreaTitle(area).toLowerCase()}`}>
+      <span aria-label={lifeAreaTitle(area)} role="img">{areaIcons[area]}</span> {text}
+    </p>
+  );
 }
 
 /** A colored chip naming a fear. */

@@ -3,7 +3,7 @@ import { rules } from "../model/content";
 import { averageRelief, fearInfo, plan, rank, scores, sourceInfo, status, xp, type Quest, type QuestStatus } from "../model/engine";
 import type { Page } from "../model/store";
 import type { Profile } from "../model/types";
-import { FamilyLegend, FearBars, FearTag, Meter, Modal, SourceTag, useStore, useTransfer } from "./Common";
+import { ExampleLine, FamilyLegend, FearBars, FearTag, Meter, Modal, SourceTag, useStore, useTransfer } from "./Common";
 
 const pages: { id: Page; title: string; icon: string }[] = [
   { id: "board", title: "Quest Board", icon: "⚑" },
@@ -138,6 +138,7 @@ function QuestRow({ quest, status: s, showXP, onSelect }: { quest: Quest; status
       <div className="quest-text">
         <div><span className="quest-label">{label}</span> <strong>{quest.title}</strong></div>
         <p className="muted">{quest.detail}</p>
+        <ExampleLine quest={quest} />
       </div>
       <div className="quest-side">
         {showXP && <span className="xp">+{quest.xp} XP</span>}
@@ -204,6 +205,7 @@ function QuestDialog({ quest, onClose }: { quest: Quest; onClose: () => void }) 
       <FearTag fear={quest.fear} />
       <h2 className="serif">{quest.title}</h2>
       <p className="muted">{quest.detail}</p>
+      <ExampleLine quest={quest} />
       <hr />
       {s.type === "available" && (
         <>

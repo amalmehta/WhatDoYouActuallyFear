@@ -111,6 +111,39 @@ final class EngineTests: XCTestCase {
         XCTAssertEqual(Engine.averageRelief(profile), 3)
     }
 
+    func testEveryStepHasAnExampleForEveryArea() {
+        for fear in FearID.allCases {
+            for area in LifeArea.allCases {
+                let examples = (1...5).compactMap { AreaExamples.example(for: fear, area: area, step: $0) }
+                XCTAssertEqual(examples.count, 5, "\(fear) / \(area)")
+                XCTAssertEqual(Set(examples).count, 5, "\(fear) / \(area) has duplicates")
+                for text in examples {
+                    XCTAssertFalse(text.trimmingCharacters(in: .whitespaces).isEmpty)
+                    XCTAssertLessThanOrEqual(text.count, 140, "\(fear) / \(area): \(text)")
+                }
+            }
+        }
+        XCTAssertNil(AreaExamples.example(for: .failure, area: .career, step: 0))
+        XCTAssertNil(AreaExamples.example(for: .failure, area: .career, step: 6))
+    }
+
+    func testPlanUsesTheChosenAreasExamples() {
+        var profile = sampleProfile()
+        profile.lifeArea = .health
+        let quests = Engine.plan(for: profile, focusCount: 1).fears[0].quests
+        XCTAssertNil(quests[0].example, "root quest has no area example")
+        for quest in quests.dropFirst() {
+            guard case .step(let n) = quest.kind else { return XCTFail("expected a step") }
+            XCTAssertEqual(quest.example, AreaExample(area: .health, text: AreaExamples.example(for: quest.fear, area: .health, step: n)!))
+        }
+        profile.lifeArea = .money
+        let moneyStep = Engine.plan(for: profile, focusCount: 1).fears[0].quests[1]
+        XCTAssertEqual(moneyStep.example?.area, .money)
+        XCTAssertNotEqual(moneyStep.example?.text, quests[1].example?.text)
+        XCTAssertEqual(moneyStep.id, quests[1].id, "quest ids don't depend on the area, so progress carries over")
+        XCTAssertNil(Engine.plan(for: profile, focusCount: 1).boss?.example)
+    }
+
     // MARK: Helpers
 
     private func sampleProfile() -> Profile {

@@ -209,6 +209,10 @@ struct QuestRow: View {
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+                if let example = quest.example {
+                    ExampleLine(example: example, fear: quest.fear)
+                        .accessibilityIdentifier("questExample-\(quest.id)")
+                }
             }
             .opacity(status == .locked ? 0.5 : 1)
             Spacer(minLength: 8)
@@ -310,6 +314,9 @@ struct QuestSheet: View {
             FearTag(fear: quest.fear)
             Text(quest.title).font(.system(size: 24, weight: .bold, design: .serif))
             Text(quest.detail).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+            if let example = quest.example {
+                ExampleLine(example: example, fear: quest.fear)
+            }
             Divider()
             switch status {
             case .available:
@@ -491,5 +498,28 @@ struct JournalView: View {
             }
         }
         .background(Theme.background(scheme))
+    }
+}
+
+/// "In your area, for example: …" under a quest step.
+struct ExampleLine: View {
+    @Environment(\.colorScheme) private var scheme
+    let example: AreaExample
+    let fear: FearID
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Image(systemName: example.area.symbol)
+                .font(.caption)
+                .foregroundStyle(Theme.color(fear, scheme))
+                .accessibilityLabel(example.area.title)
+            Text(example.text)
+                .font(.callout)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(RoundedRectangle(cornerRadius: 8).fill(Theme.color(fear, scheme).opacity(scheme == .dark ? 0.14 : 0.09)))
+        .help("An example for \(example.area.title.lowercased())")
     }
 }

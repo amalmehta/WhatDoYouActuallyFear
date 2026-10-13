@@ -11,7 +11,7 @@ const json = (v) => JSON.stringify(v, null, 2);
 
 writeFileSync(out, `// Quiz content, copied from the Mac app's Swift source (App/Model) by \`npm run copy-content\`.
 // Edit the Swift files, then re-run the script. src/test/parity.test.ts checks the two stay in sync.
-import type { Family, FearInfo, LifeArea, Question, Rules, Source } from "./types";
+import type { AreaExamples, Family, FearInfo, LifeArea, Question, Rules, Source } from "./types";
 
 export const families: Family[] = ${json(c.families)};
 
@@ -26,5 +26,8 @@ export const scale: string[] = ${json(c.scale)};
 export const questions: Question[] = ${json(c.questions)};
 
 export const rules: Rules = ${json(c.rules)};
+
+/** What each ladder step looks like in each life area: fear -> area -> one example per step. */
+export const examples: AreaExamples = ${json(c.examples)};
 `);
 console.log(`Wrote ${out}: ${c.fears.length} fears, ${c.questions.length} questions, ${c.sources.length} sources`);

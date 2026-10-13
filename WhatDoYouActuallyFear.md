@@ -74,6 +74,7 @@ Decided without asking:
 - No file input, so there's no Upload, drop or paste (the file-input rule doesn't apply).
 - SwiftUI on macOS 14+, built with XcodeGen; data stored as JSON in Application Support.
 - Website (2026-10-13). Asked: React + Vite, hosted on GitHub Pages, quiz content copied into JS with a parity test. Decided: TypeScript; progress in localStorage; `?demo` shows sample data without saving; feedback is saved in the browser with an optional "Open as GitHub issue"; Settings via the gear button or ⌘, / Ctrl+,; deployed by a GitHub Actions workflow on every push to main.
+- Area-tailored steps (2026-10-13). Asked: one example line under every step. Decided: 385 hand-written examples, kept in a new Swift file (`AreaExamples.swift`) and copied to the website like the rest of the content. Root and boss quests get none. Quest ids don't change with the area, so progress carries over. UK spelling, to match the questionnaire.
 - Export/import (2026-10-13). Asked: in both apps; importing replaces existing progress after a confirmation. Decided: the file is the existing Profile JSON (sorted keys, whole-second dates), named "What Do You Actually Fear Progress.json"; import from Upload buttons (Settings, sidebar or toolbar, welcome screen, File menu ⌘O/⌘E on Mac), dropping a file anywhere, or ⌘V; shows a preview first; each app is tested against fixtures produced by the other.
 
 CHANGELOG:
@@ -87,6 +88,7 @@ CHANGELOG:
 - 2026-10-13 — added a UI test target for the Mac app (9 XCUITests against a temporary data folder); moved Erase up in Settings so it stays on screen
 - 2026-10-13 — Mac unit and UI tests now run in GitHub Actions on a macOS runner
 - 2026-10-13 — changes now go through branches and pull requests instead of straight to main
+- 2026-10-13 — quest steps now show an example tailored to the chosen life area (both apps)
 - 2026-09-15 — added meta-instruction: built-out applications include a small feedback tab
 - 2026-09-15 — added meta-instruction: no "Claude" attribution in commits, PRs, or branches
 - 2026-09-16 — added meta-instruction: always include a README when adding to GitHub

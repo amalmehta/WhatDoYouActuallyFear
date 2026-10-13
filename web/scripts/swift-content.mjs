@@ -24,6 +24,7 @@ export function parseSwiftContent() {
   const library = read("FearLibrary.swift");
   const questions = read("Questions.swift");
   const engine = read("Engine.swift");
+  const examplesFile = read("AreaExamples.swift");
 
   // Families
   const familyEnum = between(fear, "enum FearFamily", "enum FearID");
@@ -107,5 +108,16 @@ export function parseSwiftContent() {
       .map((m) => ({ floor: Number(m[1]), title: unescape(m[2]) })),
   };
 
-  return { families, fears, sources, lifeAreas, scale, questions: questionList, rules };
+  // Area examples: fear -> area -> five strings (one per ladder step)
+  const examples = {};
+  const fearBlocks = examplesFile.split(/^ {8}\.(\w+): \[$/m).slice(1);
+  for (let i = 0; i < fearBlocks.length; i += 2) {
+    const areaBlocks = fearBlocks[i + 1].split(/^ {12}\.(\w+): \[$/m).slice(1);
+    examples[fearBlocks[i]] = {};
+    for (let j = 0; j < areaBlocks.length; j += 2) {
+      examples[fearBlocks[i]][areaBlocks[j]] = strings(areaBlocks[j + 1].split(/^ {12}\],$/m)[0]);
+    }
+  }
+
+  return { families, fears, sources, lifeAreas, scale, questions: questionList, rules, examples };
 }
