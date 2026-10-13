@@ -65,6 +65,7 @@ The website is a single-page React app with no backend. `App.tsx` holds state in
 |---|---|
 | `Questions` | 22 first-person statements. Each carries weights for one to three fears. |
 | `FearLibrary` | The content for each fear: name, family, shade, summary, how it keeps you stuck, core belief, reframe, and five escalating exposure quests. |
+| `AreaExamples` | 385 hand-written examples: for every fear, life area and ladder step, one concrete line showing what that step looks like in that area. The engine attaches the chosen area's example to each step quest. |
 | `SourceKind` | Six possible origins of a fear: criticism, a painful event, learned from someone, instability, comparison, or unsure. Each has an explanation and a root exercise. |
 | `Engine` | Pure, stateless logic. It turns answers into scores, scores and sources into a `GamePlan`, and works out each quest's status, total XP, rank and average relief. |
 | `AppStore` | Holds the flow phase, the draft questionnaire and the saved profile. It moves through the questionnaire, records quest actions, and reads and writes JSON. |
@@ -114,6 +115,7 @@ Website: localStorage keys `wdyaf.profile` (same shape as `Profile.json`), `wdya
 | XcodeGen project | A readable `project.yml` instead of a hand-edited pbxproj | Needs `xcodegen` installed to change targets |
 | Website content is copied from the Swift, not shared | The Mac app stays untouched; the website stays a plain static build | Two copies. `copy-content` regenerates the web copy and the parity test (also run in CI) fails if they drift |
 | React + Vite on GitHub Pages, no backend | Free static hosting; answers never leave the browser | No accounts or sync; clearing site data erases progress |
+| An area example under each step, rather than rewriting steps per area | Every step feels specific to where you're stuck, and the general wording still explains the step itself. Quest ids don't depend on the area, so progress carries over if you retake with a different one | 385 lines to maintain. Tests check every fear and area has 5 distinct examples of 140 characters or fewer |
 | One progress-file format: the existing Profile JSON | Moves both ways between the website and the Mac app with no conversion; the Mac app's own `Profile.json` can be imported too | No version field yet. A future format change would need one |
 | Import replaces after confirmation (no merging) | Simple and predictable | Two separate journals can't be combined |
 | Website feedback saved locally, with an optional GitHub issue | There's no server to send it to | Only feedback that people choose to post as an issue reaches the developer |
@@ -154,7 +156,7 @@ Visual check: the `--screenshots` renders in `docs/images/` (light and dark). Th
 
 - The content is written for general adult self-reflection. It isn't clinically validated and isn't a replacement for therapy.
 - English only. The 22 statements and 11 fears are fixed; there's no custom fear.
-- Quest steps aren't tailored to the chosen life area. The area shows up only in text and the fallback boss.
+- Each ladder step keeps its general wording and gets one fixed example for the chosen area. The root and boss quests have none: the root comes from where the fear started, and the boss is your own goal. Changing area means retaking the questionnaire.
 - No reminders, notifications or automatic sync. Moving progress means exporting and importing a file by hand.
 - Feedback is saved locally and isn't sent anywhere.
 - The app is ad-hoc signed and not notarized, so on another Mac Gatekeeper will ask you to confirm the first time it opens (right-click → Open).

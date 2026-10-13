@@ -15,6 +15,13 @@ struct Quest: Identifiable, Equatable {
     let title: String
     let detail: String
     let xp: Int
+    /// What this step looks like in the person's chosen life area (ladder steps only).
+    var example: AreaExample? = nil
+}
+
+struct AreaExample: Equatable {
+    let area: LifeArea
+    let text: String
 }
 
 enum QuestStatus: Equatable {
@@ -92,8 +99,10 @@ enum Engine {
             var quests = [Quest(id: "\(score.fear.rawValue).source", fear: score.fear, kind: .source,
                                 title: source.exercise.title, detail: source.exercise.detail, xp: sourceXP)]
             for (index, step) in info.ladder.enumerated() {
+                let example = AreaExamples.example(for: score.fear, area: profile.lifeArea, step: index + 1)
                 quests.append(Quest(id: "\(score.fear.rawValue).step\(index + 1)", fear: score.fear, kind: .step(index + 1),
-                                    title: step.title, detail: step.detail, xp: stepXP[index]))
+                                    title: step.title, detail: step.detail, xp: stepXP[index],
+                                    example: example.map { AreaExample(area: profile.lifeArea, text: $0) }))
             }
             return FearPlan(score: score, source: source, quests: quests)
         }

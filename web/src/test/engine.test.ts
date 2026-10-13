@@ -1,7 +1,7 @@
 // Mirrors the Mac app's EngineTests.swift.
 import { describe, expect, it } from "vitest";
-import { fears, questions, rules, sources } from "../model/content";
-import { averageRelief, emptyProfile, plan, rank, scores, status, topFears, xp, type Quest } from "../model/engine";
+import { fears, lifeAreas, questions, rules, sources } from "../model/content";
+import { areaExample, averageRelief, emptyProfile, plan, rank, scores, status, topFears, xp, type Quest } from "../model/engine";
 import { fearColor, hsbToHsl, sourceColor } from "../model/theme";
 import type { Profile, QuestCompletion } from "../model/types";
 
@@ -101,6 +101,35 @@ describe("plan and progress", () => {
     expect(plan(profile, 1).boss?.title).toBe("Start the podcast");
     profile.goal = " ";
     expect(plan(profile, 1).boss?.title).toBe("The step you've been avoiding");
+  });
+
+  it("every step has a distinct example for every area", () => {
+    for (const f of fears) {
+      for (const a of lifeAreas) {
+        const list = [1, 2, 3, 4, 5].map((n) => areaExample(f.id, a.id, n));
+        expect(list.every((t) => typeof t === "string" && t.trim().length > 0 && t.length <= 140)).toBe(true);
+        expect(new Set(list).size).toBe(5);
+      }
+    }
+    expect(areaExample("failure", "career", 0)).toBeUndefined();
+    expect(areaExample("failure", "career", 6)).toBeUndefined();
+  });
+
+  it("uses the chosen area's examples; ids don't change with the area", () => {
+    const profile = sample();
+    profile.lifeArea = "health";
+    const quests = plan(profile, 1).fears[0].quests;
+    expect(quests[0].example).toBeUndefined();
+    for (const q of quests.slice(1)) {
+      if (q.kind.type !== "step") throw new Error("expected a step");
+      expect(q.example).toEqual({ area: "health", text: areaExample(q.fear, "health", q.kind.n) });
+    }
+    profile.lifeArea = "money";
+    const money = plan(profile, 1).fears[0].quests[1];
+    expect(money.example?.area).toBe("money");
+    expect(money.example?.text).not.toBe(quests[1].example?.text);
+    expect(money.id).toBe(quests[1].id);
+    expect(plan(profile, 1).boss?.example).toBeUndefined();
   });
 
   it("XP, ranks and relief", () => {

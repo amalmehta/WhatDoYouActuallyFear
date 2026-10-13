@@ -119,6 +119,11 @@ final class WhatDoYouActuallyFearUITests: XCTestCase {
         }
         waitAndClick(element("startQuests"))
 
+        // Ladder steps show an example for the chosen area.
+        let examples = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'questExample-'"))
+        XCTAssertTrue(examples.firstMatch.waitForExistence(timeout: 5))
+        XCTAssertGreaterThanOrEqual(examples.count, 5)
+
         // Accept the first root quest, rating it scary, then finish it.
         waitAndClick(questButton(endingWith: ".source", label: "Accept"))
         let acceptSlider = element("ratingSlider")

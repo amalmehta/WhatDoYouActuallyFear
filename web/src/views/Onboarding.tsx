@@ -3,11 +3,7 @@ import { lifeAreas, questions, scale, sources } from "../model/content";
 import { fearInfo, lifeAreaTitle, plan, scores } from "../model/engine";
 import { sourceFears } from "../model/store";
 import type { Profile } from "../model/types";
-import { FamilyLegend, FearBars, FearTag, isTyping, Meter, SourceTag, useStore, useTransfer } from "./Common";
-
-const areaIcons: Record<string, string> = {
-  career: "💼", relationships: "❤️", friendships: "👥", health: "🚶", creativity: "🎨", money: "💵", purpose: "🧭",
-};
+import { areaIcons, FamilyLegend, FearBars, FearTag, isTyping, Meter, SourceTag, useStore, useTransfer } from "./Common";
 
 /** Welcome → stuck area & goal → 22 statements → where each top fear came from → results. */
 export function Onboarding() {

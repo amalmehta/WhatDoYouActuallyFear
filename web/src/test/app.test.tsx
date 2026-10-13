@@ -35,6 +35,8 @@ describe("website flow", () => {
     await user.click(screen.getByRole("button", { name: "Start my quests" }));
     expect(screen.getByRole("heading", { name: "Quest Board" })).toBeTruthy();
     expect(screen.getByRole("region", { name: "Final boss" }).textContent).toContain("Show my paintings");
+    // Steps show an example for the chosen area (Creative work).
+    expect(screen.getAllByRole("img", { name: "Creative work" }).length).toBeGreaterThanOrEqual(5);
 
     // Accept the first quest, then finish it.
     await user.click(screen.getAllByRole("button", { name: "Accept" })[0]);
