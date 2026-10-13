@@ -120,11 +120,21 @@ Website: localStorage keys `wdyaf.profile` (same shape as `Profile.json`), `wdya
 
 ## Testing
 
-`xcodebuild … test` runs 22 XCTest cases:
+`xcodebuild … test` runs 22 unit tests and 9 UI tests.
+
+Unit tests:
 
 - **EngineTests:** every fear has five ladder steps and at least two statements; question ids are unique; shades don't collide within a family; scores are 0% for all-zero answers and 100% for all-max answers; the right fear comes out on top for targeted answers; out-of-range answers are clamped; plan shape and focus clamping; the root quest follows the chosen source; unlocking order; boss unlocking; the boss uses your goal or a fallback; XP, ranks and average relief.
 - **ProgressFileTests:** `Tests/Fixtures/Progress from Mac.json` is byte-for-byte what this app writes; the website's export of the same profile decodes identically; millisecond dates are accepted; bad files are rejected with the right message; preview changes nothing; import replaces and persists. The website tests read the Mac fixture and write the website fixture, so each app is checked against the other's real output.
 - **StoreTests** (temporary folder): a fresh start; the full questionnaire saves and reloads identically; back navigation; accept, complete and undo persist; retake keeps the journal; erase plus feedback.
+
+UI tests (`UITests/`, XCUITest) launch the real app with `-UITestDataDirectory` pointing at a temporary folder, and find controls by accessibility identifiers (`begin`, `answer-0…4`, `source-<id>`, `questAction-<quest id>`, `questPrimary`, `ratingSlider`, …):
+
+- **Full flow:** the whole questionnaire by clicks and keys 1–5, then sources, results, accepting a quest with a fear rating, and finishing it with a lower rating and a note. It checks the saved `Profile.json` and the Journal.
+- **Reopening:** saved progress opens on the Quest Board with the accepted quest kept. **Back** (⌘[) keeps the earlier answer. **⌘,** opens Settings with Export and Import.
+- **Import and export:** pasting a website progress file with ⌘V imports it after confirmation; pasting other JSON explains why it can't. The welcome-screen link opens the system open panel, and File → Export Progress… opens the save panel (both cancelled, so nothing is written outside the temporary folder). **Erase everything** returns to the welcome screen and deletes the profile.
+
+The tests wait for each statement before answering it, and fill text fields by pasting, because typing quickly into SwiftUI controls can drop keys. Drag and drop of a file isn't covered: XCUITest can't drag files in from Finder. That path is covered by the website's tests and the shared import code.
 
 `npm --prefix web test` runs 36 Vitest cases:
 

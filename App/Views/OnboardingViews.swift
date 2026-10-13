@@ -40,6 +40,7 @@ struct WelcomeView: View {
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 560)
             Button("Begin") { store.start() }
+                .accessibilityIdentifier("begin")
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .tint(Theme.accent)
@@ -48,6 +49,7 @@ struct WelcomeView: View {
                 .font(.callout)
                 .foregroundStyle(.secondary)
             Button("Have a progress file? Import it…") { store.transferRequest = .importFile }
+                .accessibilityIdentifier("importLink")
                 .buttonStyle(.link)
                 .font(.callout)
         }
@@ -80,6 +82,7 @@ struct AreaGoalView: View {
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("area-\(area.rawValue)")
                 }
             }
             VStack(alignment: .leading, spacing: 8) {
@@ -90,11 +93,13 @@ struct AreaGoalView: View {
                 TextField("e.g. Apply for the design lead role", text: $store.draft.goal)
                     .textFieldStyle(.roundedBorder)
                     .font(.title3)
+                    .accessibilityIdentifier("goalField")
                     .onSubmit { store.phase = .questions }
             }
             HStack {
                 Spacer()
                 Button("Continue") { store.phase = .questions }
+                    .accessibilityIdentifier("continue")
                     .buttonStyle(.borderedProminent)
                     .tint(Theme.accent)
                     .controlSize(.large)
@@ -131,6 +136,7 @@ struct QuestionCard: View {
         VStack(alignment: .leading, spacing: 26) {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Statement \(index + 1) of \(Questions.all.count)")
+                    .accessibilityIdentifier("statementCounter")
                     .font(.callout.weight(.medium))
                     .foregroundStyle(.secondary)
                 Meter(fraction: Double(index) / Double(Questions.all.count))
@@ -159,6 +165,7 @@ struct QuestionCard: View {
                     }
                     .buttonStyle(.plain)
                     .keyboardShortcut(KeyEquivalent(Character("\(value + 1)")), modifiers: [])
+                    .accessibilityIdentifier("answer-\(value)")
                 }
             }
             Text("Tip: press 1–5 to answer.")
@@ -210,6 +217,7 @@ struct SourceQuestionView: View {
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
+                        .accessibilityIdentifier("source-\(source.rawValue)")
                     }
                 }
                 TextField("Earliest memory of this fear (optional)", text: Binding(
@@ -224,6 +232,7 @@ struct SourceQuestionView: View {
                         .tint(Theme.accent)
                         .controlSize(.large)
                         .disabled(chosen == nil)
+                        .accessibilityIdentifier("nextSource")
                         .keyboardShortcut(.defaultAction)
                 }
             }
@@ -252,6 +261,7 @@ struct RevealView: View {
                 .tint(Theme.accent)
                 .controlSize(.large)
                 .keyboardShortcut(.defaultAction)
+                .accessibilityIdentifier("startQuests")
             }
             .frame(maxWidth: 820)
             .padding(40)

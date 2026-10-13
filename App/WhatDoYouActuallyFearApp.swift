@@ -4,7 +4,7 @@ import SwiftUI
 @main
 struct WhatDoYouActuallyFearApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
-    @State private var store = AppStore()
+    @State private var store = AppStore(dataDirectory: AppStore.launchDirectory)
 
     var body: some Scene {
         Window("What Do You Actually Fear", id: "main") {

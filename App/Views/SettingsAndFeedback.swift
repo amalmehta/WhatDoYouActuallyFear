@@ -40,15 +40,12 @@ struct SettingsView: View {
                     Button("Retake the questionnaire") { store.start() }
                         .disabled(store.profile == nil)
                     Spacer()
+                    Button("Erase everything…", role: .destructive) { confirmErase = true }
                 }
                 TransferButtons()
                 Text("A progress file works in both this app and the website. You can also drop one on the main window or paste it with ⌘V.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                HStack {
-                    Spacer()
-                    Button("Erase everything…", role: .destructive) { confirmErase = true }
-                }
                 if let error = store.lastSaveError {
                     Text("Couldn't save: \(error)").foregroundStyle(.red).font(.caption)
                 }

@@ -35,6 +35,20 @@
                ReferencedContainer = "container:WhatDoYouActuallyFear.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DD09CB6B61C2E7538750A962"
+               BuildableName = "WhatDoYouActuallyFearUITests.xctest"
+               BlueprintName = "WhatDoYouActuallyFearUITests"
+               ReferencedContainer = "container:WhatDoYouActuallyFear.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -61,6 +75,17 @@
                BlueprintIdentifier = "F266AEA1DE45B58744E84FCE"
                BuildableName = "WhatDoYouActuallyFearTests.xctest"
                BlueprintName = "WhatDoYouActuallyFearTests"
+               ReferencedContainer = "container:WhatDoYouActuallyFear.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DD09CB6B61C2E7538750A962"
+               BuildableName = "WhatDoYouActuallyFearUITests.xctest"
+               BlueprintName = "WhatDoYouActuallyFearUITests"
                ReferencedContainer = "container:WhatDoYouActuallyFear.xcodeproj">
             </BuildableReference>
          </TestableReference>

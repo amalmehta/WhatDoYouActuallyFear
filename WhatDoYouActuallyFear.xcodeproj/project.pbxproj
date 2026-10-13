@@ -24,12 +24,20 @@
 		DD3083165D9F699A9E1FEC57 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E10348DFB76BB2FA7655FF /* AppStore.swift */; };
 		E13705026170F8AD5C227065 /* ProgressFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12752F4A5844BF124F6CCB /* ProgressFileTests.swift */; };
 		EDDE27A3BF62A64EF386F9D0 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547663A2E664D7C04433F033 /* Profile.swift */; };
+		EDE5D5CC59C7DA269A3E3128 /* WhatDoYouActuallyFearUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F6FD9E879F1FD49DD970C /* WhatDoYouActuallyFearUITests.swift */; };
 		F8BD8F5A71A960CA9E5586E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D2898953165CD00D92D3737 /* Assets.xcassets */; };
 		FC8E007575796E3676BEC933 /* ProgressFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623A29C80628CAC5E47DA7EE /* ProgressFile.swift */; };
 		FCBDB813B032F034C59627E2 /* ProgressTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AB9C3A5AE4DA823C7FA293 /* ProgressTransfer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3954F618106EDA9C37281184 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7182EEFC47757896F1A0CEB1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6F71622F58AEC0BF48BB9A51;
+			remoteInfo = WhatDoYouActuallyFear;
+		};
 		578460EA91B856CDB7900EB3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7182EEFC47757896F1A0CEB1 /* Project object */;
@@ -59,7 +67,9 @@
 		CCB6645F27338EA28F84FD9F /* WhatDoYouActuallyFearTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhatDoYouActuallyFearTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF08C38C9C453064BF68B806 /* FearLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FearLibrary.swift; sourceTree = "<group>"; };
 		D3AB9C3A5AE4DA823C7FA293 /* ProgressTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTransfer.swift; sourceTree = "<group>"; };
+		D63F6FD9E879F1FD49DD970C /* WhatDoYouActuallyFearUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatDoYouActuallyFearUITests.swift; sourceTree = "<group>"; };
 		D969FB381EBF0A81917E5784 /* EngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTests.swift; sourceTree = "<group>"; };
+		EBC44B3F20B27DB558A885DB /* WhatDoYouActuallyFearUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhatDoYouActuallyFearUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC12752F4A5844BF124F6CCB /* ProgressFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressFileTests.swift; sourceTree = "<group>"; };
 		FAD5225EB6E3F39176616B81 /* WhatDoYouActuallyFear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatDoYouActuallyFear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -83,6 +93,7 @@
 			children = (
 				191160519C84983F6E458ACE /* App */,
 				6C9F79AAAC90B65FDDFE9B80 /* Tests */,
+				665949AF5EBAB1F4162D4095 /* UITests */,
 				31A69061AEC0ABB97DDDD8C2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -100,8 +111,17 @@
 			children = (
 				FAD5225EB6E3F39176616B81 /* WhatDoYouActuallyFear.app */,
 				CCB6645F27338EA28F84FD9F /* WhatDoYouActuallyFearTests.xctest */,
+				EBC44B3F20B27DB558A885DB /* WhatDoYouActuallyFearUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		665949AF5EBAB1F4162D4095 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				D63F6FD9E879F1FD49DD970C /* WhatDoYouActuallyFearUITests.swift */,
+			);
+			path = UITests;
 			sourceTree = "<group>";
 		};
 		6C9F79AAAC90B65FDDFE9B80 /* Tests */ = {
@@ -178,6 +198,24 @@
 			productReference = FAD5225EB6E3F39176616B81 /* WhatDoYouActuallyFear.app */;
 			productType = "com.apple.product-type.application";
 		};
+		DD09CB6B61C2E7538750A962 /* WhatDoYouActuallyFearUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7EE1DE59EE2DC8A1EB092C1 /* Build configuration list for PBXNativeTarget "WhatDoYouActuallyFearUITests" */;
+			buildPhases = (
+				DC1EC33C8389AB67D75FBFE8 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				09144F42A05A519E48EB174B /* PBXTargetDependency */,
+			);
+			name = WhatDoYouActuallyFearUITests;
+			packageProductDependencies = (
+			);
+			productName = WhatDoYouActuallyFearUITests;
+			productReference = EBC44B3F20B27DB558A885DB /* WhatDoYouActuallyFearUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		F266AEA1DE45B58744E84FCE /* WhatDoYouActuallyFearTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8ECC098E22A3FA6BACDEF421 /* Build configuration list for PBXNativeTarget "WhatDoYouActuallyFearTests" */;
@@ -209,6 +247,10 @@
 					6F71622F58AEC0BF48BB9A51 = {
 						ProvisioningStyle = Manual;
 					};
+					DD09CB6B61C2E7538750A962 = {
+						ProvisioningStyle = Manual;
+						TestTargetID = 6F71622F58AEC0BF48BB9A51;
+					};
 					F266AEA1DE45B58744E84FCE = {
 						ProvisioningStyle = Manual;
 					};
@@ -230,6 +272,7 @@
 			targets = (
 				6F71622F58AEC0BF48BB9A51 /* WhatDoYouActuallyFear */,
 				F266AEA1DE45B58744E84FCE /* WhatDoYouActuallyFearTests */,
+				DD09CB6B61C2E7538750A962 /* WhatDoYouActuallyFearUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -265,6 +308,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DC1EC33C8389AB67D75FBFE8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EDE5D5CC59C7DA269A3E3128 /* WhatDoYouActuallyFearUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E202DB5AC0A286CB742B72BF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -289,6 +340,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		09144F42A05A519E48EB174B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6F71622F58AEC0BF48BB9A51 /* WhatDoYouActuallyFear */;
+			targetProxy = 3954F618106EDA9C37281184 /* PBXContainerItemProxy */;
+		};
 		A3FA12DE6DD14A39768E9E8E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6F71622F58AEC0BF48BB9A51 /* WhatDoYouActuallyFear */;
@@ -466,6 +522,25 @@
 			};
 			name = Debug;
 		};
+		D36044AAA844BA7958598F4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.amalmehta.WhatDoYouActuallyFearUITests;
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = WhatDoYouActuallyFear;
+			};
+			name = Release;
+		};
 		D7B1458858E6934C10E7B894 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -484,6 +559,25 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/What Do You Actually Fear.app/Contents/MacOS/What Do You Actually Fear";
 			};
 			name = Release;
+		};
+		E34BE50A0C5FAB0042864C2C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.amalmehta.WhatDoYouActuallyFearUITests;
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = WhatDoYouActuallyFear;
+			};
+			name = Debug;
 		};
 		EE918F6E52A16F886C7B49E9 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -512,6 +606,15 @@
 			buildConfigurations = (
 				EE918F6E52A16F886C7B49E9 /* Debug */,
 				D7B1458858E6934C10E7B894 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C7EE1DE59EE2DC8A1EB092C1 /* Build configuration list for PBXNativeTarget "WhatDoYouActuallyFearUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E34BE50A0C5FAB0042864C2C /* Debug */,
+				D36044AAA844BA7958598F4E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

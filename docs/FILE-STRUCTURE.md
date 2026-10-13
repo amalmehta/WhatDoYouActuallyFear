@@ -53,6 +53,8 @@ WhatDoYouActuallyFear/
 │       │   └── ProgressTransfer.tsx Export and import: file picker, confirmation, drop anywhere, paste
 │       └── test/                    Parity, engine, progress-file and full-UI tests (Vitest + Testing Library)
 ├── .github/workflows/pages.yml      Tests, builds and deploys the website to GitHub Pages
+├── UITests/
+│   └── WhatDoYouActuallyFearUITests.swift  Drives the real Mac app: questionnaire to finished quest, reopening, back, Settings, paste import, file panels, erase
 ├── Tests/
 │   ├── EngineTests.swift            Content integrity, scoring, plans, unlocking, XP and ranks
 │   ├── StoreTests.swift             Full questionnaire flow, persistence, retake, erase, feedback

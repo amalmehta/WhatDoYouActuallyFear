@@ -40,11 +40,24 @@ targets:
         BUNDLE_LOADER: "$(TEST_HOST)"
         CODE_SIGN_IDENTITY: "-"
         CODE_SIGN_STYLE: Manual
+  WhatDoYouActuallyFearUITests:
+    type: bundle.ui-testing
+    platform: macOS
+    sources: [UITests]
+    dependencies:
+      - target: WhatDoYouActuallyFear
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: WhatDoYouActuallyFear
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
 schemes:
   WhatDoYouActuallyFear:
     build:
       targets:
         WhatDoYouActuallyFear: all
         WhatDoYouActuallyFearTests: [test]
+        WhatDoYouActuallyFearUITests: [test]
     test:
-      targets: [WhatDoYouActuallyFearTests]
+      targets: [WhatDoYouActuallyFearTests, WhatDoYouActuallyFearUITests]

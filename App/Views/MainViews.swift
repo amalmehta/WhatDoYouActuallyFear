@@ -165,6 +165,7 @@ struct ProgressHeader: View {
             }
             VStack(alignment: .leading, spacing: 6) {
                 Text("Fear vs. reality").font(.caption).foregroundStyle(.secondary)
+                    .accessibilityIdentifier("reliefTitle")
                 if let relief = Engine.averageRelief(profile) {
                     Text(relief > 0
                          ? "Reality has been \(String(format: "%.1f", relief)) points less scary than you expected."
@@ -234,14 +235,17 @@ struct QuestRow: View {
         switch status {
         case .available:
             Button("Accept") { onSelect(quest) }.controlSize(.small)
+                .accessibilityIdentifier("questAction-\(quest.id)")
         case .accepted:
             Button("I did it") { onSelect(quest) }.controlSize(.small).buttonStyle(.borderedProminent).tint(Theme.accent)
+                .accessibilityIdentifier("questAction-\(quest.id)")
         case .done(let c):
             Button { onSelect(quest) } label: {
                 Text("feared \(c.predicted) → felt \(c.actual)").font(.caption.monospacedDigit())
             }
             .buttonStyle(.plain)
             .foregroundStyle(.secondary)
+            .accessibilityIdentifier("questAction-\(quest.id)")
             .help("Expected \(c.predicted)/10, actually \(c.actual)/10")
         case .locked:
             EmptyView()
@@ -316,6 +320,7 @@ struct QuestSheet: View {
                 ratingSlider("How scary was it actually?")
                 TextField("What happened? What did you learn? (optional)", text: $note, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("questNote")
                     .lineLimit(3...6)
                 buttons(primary: "I did it", secondary: ("Give up this quest", { store.undo(quest) })) {
                     store.complete(quest, actual: Int(rating), note: note)
@@ -347,6 +352,7 @@ struct QuestSheet: View {
             } maximumValueLabel: {
                 Text("terrified").font(.caption)
             }
+            .accessibilityIdentifier("ratingSlider")
         }
     }
 
@@ -358,6 +364,7 @@ struct QuestSheet: View {
             Spacer()
             Button("Cancel") { dismiss() }.keyboardShortcut(.cancelAction)
             Button(primary) { action(); dismiss() }
+                .accessibilityIdentifier("questPrimary")
                 .buttonStyle(.borderedProminent)
                 .tint(Theme.accent)
                 .keyboardShortcut(.defaultAction)

@@ -41,6 +41,14 @@ final class AppStore {
         return base.appendingPathComponent("What Do You Actually Fear", isDirectory: true)
     }
 
+    /// UI tests launch with `-UITestDataDirectory <folder>` so they never touch real progress.
+    nonisolated static var launchDirectory: URL {
+        if let path = UserDefaults.standard.string(forKey: "UITestDataDirectory") {
+            return URL(fileURLWithPath: path, isDirectory: true)
+        }
+        return defaultDirectory
+    }
+
     init(dataDirectory: URL = AppStore.defaultDirectory) {
         self.dataDirectory = dataDirectory
         let loaded = Self.load(Profile.self, from: dataDirectory.appendingPathComponent("Profile.json"))

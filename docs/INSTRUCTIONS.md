@@ -24,9 +24,25 @@ Or open `WhatDoYouActuallyFear.xcodeproj` in Xcode and press ⌘R. To keep it, d
 
 ## Run the tests
 
+All Mac tests: 22 unit tests plus 9 UI tests. The UI tests take over the mouse and keyboard for about 4 minutes, and macOS may ask you to allow UI automation the first time.
+
 ```bash
 xcodebuild -project WhatDoYouActuallyFear.xcodeproj -scheme WhatDoYouActuallyFear -derivedDataPath build test
 ```
+
+Only the unit tests (a few seconds, no screen takeover):
+
+```bash
+xcodebuild -project WhatDoYouActuallyFear.xcodeproj -scheme WhatDoYouActuallyFear -derivedDataPath build test -only-testing:WhatDoYouActuallyFearTests
+```
+
+Only the UI tests:
+
+```bash
+xcodebuild -project WhatDoYouActuallyFear.xcodeproj -scheme WhatDoYouActuallyFear -derivedDataPath build test -only-testing:WhatDoYouActuallyFearUITests
+```
+
+The UI tests launch the app with `-UITestDataDirectory <temporary folder>`, so they never read or change your own progress. They borrow the clipboard (for the paste tests, and to fill text fields reliably) and put back what was there.
 
 ## Regenerate the README screenshots
 
