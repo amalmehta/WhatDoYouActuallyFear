@@ -26,6 +26,7 @@
 		E13705026170F8AD5C227065 /* ProgressFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12752F4A5844BF124F6CCB /* ProgressFileTests.swift */; };
 		EDDE27A3BF62A64EF386F9D0 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547663A2E664D7C04433F033 /* Profile.swift */; };
 		EDE5D5CC59C7DA269A3E3128 /* WhatDoYouActuallyFearUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F6FD9E879F1FD49DD970C /* WhatDoYouActuallyFearUITests.swift */; };
+		F1CE2C936E48441EC8272243 /* Encouragement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCDF80A0F69F7521C3F7663 /* Encouragement.swift */; };
 		F8BD8F5A71A960CA9E5586E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D2898953165CD00D92D3737 /* Assets.xcassets */; };
 		FC8E007575796E3676BEC933 /* ProgressFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623A29C80628CAC5E47DA7EE /* ProgressFile.swift */; };
 		FCBDB813B032F034C59627E2 /* ProgressTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AB9C3A5AE4DA823C7FA293 /* ProgressTransfer.swift */; };
@@ -64,6 +65,7 @@
 		929636F4BDA94A487A7364A4 /* StoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTests.swift; sourceTree = "<group>"; };
 		ABA92A97A76434C8A94BEC99 /* WhatDoYouActuallyFearApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatDoYouActuallyFearApp.swift; sourceTree = "<group>"; };
 		B0789E49B5530268ABFA4118 /* Fear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fear.swift; sourceTree = "<group>"; };
+		BFCDF80A0F69F7521C3F7663 /* Encouragement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encouragement.swift; sourceTree = "<group>"; };
 		C8AC6AA921516D08005DF109 /* ScreenshotRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotRenderer.swift; sourceTree = "<group>"; };
 		CCB6645F27338EA28F84FD9F /* WhatDoYouActuallyFearTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhatDoYouActuallyFearTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF08C38C9C453064BF68B806 /* FearLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FearLibrary.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				EF0897B83CAF507A4450B89A /* AreaExamples.swift */,
+				BFCDF80A0F69F7521C3F7663 /* Encouragement.swift */,
 				62D87F44161001967B2BBF94 /* Engine.swift */,
 				B0789E49B5530268ABFA4118 /* Fear.swift */,
 				CF08C38C9C453064BF68B806 /* FearLibrary.swift */,
@@ -325,6 +328,7 @@
 			files = (
 				DD3083165D9F699A9E1FEC57 /* AppStore.swift in Sources */,
 				4C367362307E29814238EA55 /* AreaExamples.swift in Sources */,
+				F1CE2C936E48441EC8272243 /* Encouragement.swift in Sources */,
 				445959B1A13C4AABD6F8D6FC /* Engine.swift in Sources */,
 				D1C4B43430DDC47DDE35C0B3 /* Fear.swift in Sources */,
 				AA9C368A15E35904D180A4A1 /* FearLibrary.swift in Sources */,

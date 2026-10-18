@@ -30,6 +30,7 @@ struct WhatDoYouActuallyFearApp: App {
         Settings {
             SettingsView()
                 .environment(store)
+                .fontDesign(.rounded)
         }
     }
 }

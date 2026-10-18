@@ -42,6 +42,36 @@ final class StoreTests: XCTestCase {
         XCTAssertEqual(reloaded.phase, .main)
     }
 
+    func testBreathersBetweenParts() {
+        let store = AppStore(dataDirectory: folder)
+        store.start()
+        store.phase = .questions
+        for _ in 0..<5 { store.answer(2) }
+        XCTAssertNil(store.sectionBreak)
+        store.answer(2) // last statement of part 1
+        XCTAssertEqual(store.sectionBreak, 0)
+        XCTAssertEqual(store.questionIndex, 6)
+        store.continueAfterBreak()
+        XCTAssertNil(store.sectionBreak)
+        store.answer(2)
+        store.back()
+        XCTAssertEqual(store.questionIndex, 6)
+        XCTAssertEqual(Questions.sections.map(\.range.count).reduce(0, +), Questions.all.count, "parts cover every statement")
+    }
+
+    func testFinishingAQuestCelebrates() {
+        let store = AppStore(dataDirectory: folder)
+        runQuestionnaire(store)
+        let quest = Engine.plan(for: store.profile!, focusCount: 1).fears[0].quests[0]
+        store.accept(quest, predicted: 8)
+        store.complete(quest, actual: 3, note: "")
+        let celebration = try? XCTUnwrap(store.celebration)
+        XCTAssertEqual(celebration?.quest.id, quest.id)
+        XCTAssertEqual(celebration?.cheer, Encouragement.line(for: quest.id))
+        XCTAssertTrue(celebration?.reality.contains("overestimated by 5") ?? false)
+        XCTAssertEqual(celebration?.newRank, nil, "30 XP stays in the first rank")
+    }
+
     func testBackStepsThroughTheFlow() {
         let store = AppStore(dataDirectory: folder)
         store.start()

@@ -31,9 +31,11 @@ export function parseSwiftContent() {
   const familyIds = between(familyEnum, "case ", "\n").split(",").map((s) => s.trim());
   const familyTitles = Object.fromEntries(
     [...between(familyEnum, "var title", "var hue").matchAll(new RegExp(String.raw`case \.(\w+): ${STR}`, "g"))].map((m) => [m[1], unescape(m[2])]));
+  const familyEmoji = Object.fromEntries(
+    [...between(familyEnum, "var emoji", "var hue").matchAll(new RegExp(String.raw`case \.(\w+): ${STR}`, "g"))].map((m) => [m[1], unescape(m[2])]));
   const familyHues = Object.fromEntries(
     [...between(familyEnum, "var hue").matchAll(/case \.(\w+): ([\d.]+)/g)].map((m) => [m[1], Number(m[2])]));
-  const families = familyIds.map((id) => ({ id, title: familyTitles[id], hue: familyHues[id] }));
+  const families = familyIds.map((id) => ({ id, title: familyTitles[id], emoji: familyEmoji[id], hue: familyHues[id] }));
 
   // Fear ids, in declaration order
   const fearEnum = between(fear, "enum FearID", "var id");
@@ -97,6 +99,13 @@ export function parseSwiftContent() {
       weights: Object.fromEntries([...m[3].matchAll(/\.(\w+): ([\d.]+)/g)].map((w) => [w[1], Number(w[2])])),
     }));
 
+  // Questionnaire parts
+  const sections = [...questions.matchAll(new RegExp(String.raw`QuestionSection\(title: ${STR}, range: (\d+)\.\.<(\d+), cheer: ${STR}\)`, "g"))]
+    .map((m) => ({ title: unescape(m[1]), start: Number(m[2]), end: Number(m[3]), cheer: unescape(m[4]) }));
+
+  // Encouragement after a finished quest
+  const cheers = strings(between(read("Encouragement.swift"), "static let questDone: [String] = [", "]"));
+
   // Game constants
   const numbers = (label) => between(engine, label, "]").match(/\d+/g).map(Number);
   const rules = {
@@ -119,5 +128,5 @@ export function parseSwiftContent() {
     }
   }
 
-  return { families, fears, sources, lifeAreas, scale, questions: questionList, rules, examples };
+  return { families, fears, sources, lifeAreas, scale, questions: questionList, sections, cheers, rules, examples };
 }

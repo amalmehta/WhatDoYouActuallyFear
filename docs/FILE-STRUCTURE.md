@@ -11,9 +11,10 @@ WhatDoYouActuallyFear/
 │   │   ├── Fear.swift               Fear IDs and families, source kinds (with root exercises), life areas
 │   │   ├── FearLibrary.swift        Content for all 11 fears: summary, belief, reframe, 5-step ladder
 │   │   ├── AreaExamples.swift       One example per fear, life area and step (385 lines)
-│   │   ├── Questions.swift          The 22 statements and how each one weights the fears
+│   │   ├── Questions.swift          The 22 statements, how each one weights the fears, and the four parts
 │   │   ├── Profile.swift            Saved data: answers, sources, accepted quests, completions; feedback entries
-│   │   ├── Engine.swift             Pure logic: scoring, plan building, unlocking, XP, ranks, fear vs. reality
+│   │   ├── Engine.swift             Pure logic: scoring, plan building, unlocking, next quest, XP, ranks, fear vs. reality
+│   │   ├── Encouragement.swift      Cheers and the fear-versus-reality line shown after a finished quest
 │   │   └── ProgressFile.swift       Progress file shared with the website: encode, decode, validate, preview
 │   ├── Store/
 │   │   └── AppStore.swift           Observable app state, questionnaire flow, JSON load and save
@@ -51,6 +52,7 @@ WhatDoYouActuallyFear/
 │       │   ├── Onboarding.tsx       Welcome, area and goal, statements, sources, results
 │       │   ├── Main.tsx             Sidebar shell, Quest Board, quest dialog, Fear Profile, Journal
 │       │   ├── SettingsFeedback.tsx Settings and feedback dialogs
+│       │   ├── Celebration.tsx      The celebration after finishing a quest
 │       │   └── ProgressTransfer.tsx Export and import: file picker, confirmation, drop anywhere, paste
 │       └── test/                    Parity, engine, progress-file and full-UI tests (Vitest + Testing Library)
 ├── .github/workflows/pages.yml      Tests, builds and deploys the website to GitHub Pages

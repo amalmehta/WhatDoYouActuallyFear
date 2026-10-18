@@ -29,6 +29,10 @@ final class AppStore {
     var lastSaveError: String?
     /// Set by menu commands; the main window opens the file panel.
     var transferRequest: TransferRequest?
+    /// Set right after a questionnaire part ends (index of that part); the breather screen shows until it's cleared.
+    var sectionBreak: Int?
+    /// Set when a quest is finished; the celebration shows until it's cleared.
+    var celebration: Celebration?
 
     enum TransferRequest { case importFile, exportFile }
 
@@ -64,12 +68,16 @@ final class AppStore {
         draft = Profile(lifeArea: profile?.lifeArea ?? .career, goal: profile?.goal ?? "")
         questionIndex = 0
         sourceIndex = 0
+        sectionBreak = nil
         phase = .area
     }
 
     func answer(_ value: Int) {
+        sectionBreak = nil
         draft.answers[Questions.all[questionIndex].id] = value
         if questionIndex + 1 < Questions.all.count {
+            let part = Questions.section(containing: questionIndex)
+            if Questions.section(containing: questionIndex + 1) != part { sectionBreak = part }
             questionIndex += 1
         } else {
             sourceIndex = 0
@@ -81,11 +89,16 @@ final class AppStore {
         switch phase {
         case .area: phase = profile == nil ? .welcome : .main
         case .questions:
+            sectionBreak = nil
             if questionIndex > 0 { questionIndex -= 1 } else { phase = .area }
         case .sources:
             if sourceIndex > 0 { sourceIndex -= 1 } else { phase = .questions }
         default: break
         }
+    }
+
+    func continueAfterBreak() {
+        sectionBreak = nil
     }
 
     func chooseSource(_ source: SourceKind) {
@@ -124,11 +137,17 @@ final class AppStore {
     func complete(_ quest: Quest, actual: Int, note: String) {
         guard profile != nil else { return }
         let predicted = profile!.accepted[quest.id] ?? actual
+        let rankBefore = Engine.rank(for: Engine.xp(profile!))
         profile!.completions[quest.id] = QuestCompletion(
             date: Date.nowWholeSeconds, fear: quest.fear, title: quest.title, xp: quest.xp,
             predicted: predicted, actual: actual, note: note.trimmingCharacters(in: .whitespacesAndNewlines))
         profile!.accepted[quest.id] = nil
         save()
+        let rankAfter = Engine.rank(for: Engine.xp(profile!))
+        celebration = Celebration(
+            quest: quest, cheer: Encouragement.line(for: quest.id),
+            reality: Encouragement.reality(predicted: predicted, actual: actual),
+            newRank: rankAfter.title != rankBefore.title ? rankAfter.title : nil)
     }
 
     func undo(_ quest: Quest) {
@@ -199,4 +218,14 @@ final class AppStore {
 extension Date {
     /// Saved dates use ISO 8601 (whole seconds), so in-memory dates match what reloads.
     static var nowWholeSeconds: Date { Date(timeIntervalSince1970: Date().timeIntervalSince1970.rounded(.down)) }
+}
+
+/// What the celebration after a finished quest shows.
+struct Celebration: Identifiable, Equatable {
+    let id = UUID()
+    let quest: Quest
+    let cheer: String
+    let reality: String
+    /// Set when this quest moved the person up a rank.
+    let newRank: String?
 }

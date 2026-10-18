@@ -1,17 +1,17 @@
 import { useEffect } from "react";
-import { lifeAreas, questions, scale, sources } from "../model/content";
-import { fearInfo, lifeAreaTitle, plan, scores } from "../model/engine";
+import { families, lifeAreas, questions, scale, sections, sources } from "../model/content";
+import { fearInfo, lifeAreaTitle, plan, scores, sectionOf } from "../model/engine";
 import { sourceFears } from "../model/store";
 import type { Profile } from "../model/types";
 import { areaIcons, FamilyLegend, FearBars, FearTag, isTyping, Meter, SourceTag, useStore, useTransfer } from "./Common";
 
-/** Welcome → stuck area & goal → 22 statements → where each top fear came from → results. */
+/** Welcome → stuck area & goal → 22 statements in four parts (with breathers) → where each top fear came from → results. */
 export function Onboarding() {
   const { state } = useStore();
   switch (state.phase) {
     case "welcome": return <Welcome />;
     case "area": return <AreaGoal />;
-    case "questions": return <QuestionStep />;
+    case "questions": return state.sectionBreak !== null ? <Breather part={state.sectionBreak} /> : <QuestionStep />;
     case "sources": return <SourceStep />;
     case "reveal": return <Reveal />;
     default: return null;
@@ -23,14 +23,19 @@ function Welcome() {
   const transfer = useTransfer();
   return (
     <main className="center welcome">
-      <div className="flame" aria-hidden>🔥</div>
-      <h1 className="serif">What do you actually fear?</h1>
+      <div className="hero-emoji" aria-hidden>🌱</div>
+      <h1>What do you actually fear?</h1>
       <p className="lead">
-        Answer {questions.length} quick statements. Find the fears keeping you stuck, where they came from, and a quest plan
-        to face them — one small brave step at a time.
+        Let's find out together. You'll answer {questions.length} quick statements (about 5 minutes, and there are no
+        wrong answers). Then you'll get a gentle, step-by-step plan for facing what's been holding you back.
       </p>
-      <button className="primary large" onClick={() => dispatch({ type: "start" })} autoFocus>Begin</button>
-      <p className="muted small">🔒 Everything stays in this browser.</p>
+      <ul className="pills" aria-label="What you'll get">
+        <li>🔍 Find your fears</li>
+        <li>🌿 See where they started</li>
+        <li>🗺️ Get small, doable steps</li>
+      </ul>
+      <button className="primary large" onClick={() => dispatch({ type: "start" })} autoFocus>Let's begin</button>
+      <p className="muted small">🔒 Private: everything stays in this browser.</p>
       <p className="small"><a href="?demo">See a demo with sample answers</a></p>
       <p className="small">
         <button className="link import-link" onClick={transfer.openImport}>Have a progress file? Import it…</button>
@@ -49,7 +54,10 @@ function AreaGoal() {
   return (
     <main className="narrow">
       <BackButton />
-      <h1 className="serif">Where do you feel most stuck?</h1>
+      <header className="stack-tight">
+        <h1>First, where do you feel most stuck?</h1>
+        <p className="muted">Pick the one that matters most right now. Your quests will include examples for it.</p>
+      </header>
       <div className="area-grid" role="radiogroup" aria-label="Life area">
         {lifeAreas.map((area) => (
           <button key={area.id} role="radio" aria-checked={state.draft.lifeArea === area.id}
@@ -63,7 +71,7 @@ function AreaGoal() {
       <form onSubmit={(e) => { e.preventDefault(); dispatch({ type: "goto", phase: "questions" }); }}>
         <label className="field">
           <span className="field-title">If you weren't afraid, what would you do?</span>
-          <span className="muted">This becomes your final boss quest. Leave it blank if you're not sure yet.</span>
+          <span className="muted">Optional. Whatever you write becomes your final quest, the one everything builds up to.</span>
           <input autoFocus value={state.draft.goal} placeholder="e.g. Apply for the design lead role"
             onChange={(e) => dispatch({ type: "setGoal", goal: e.target.value })} />
         </label>
@@ -93,14 +101,31 @@ function QuestionStep() {
   );
 }
 
+/** The four questionnaire parts as segments: done ones full, the current one filling up. */
+export function PartsMap({ questionIndex }: { questionIndex: number }) {
+  return (
+    <div className="parts-map" aria-label={`Part ${sectionOf(Math.min(questionIndex, questions.length - 1)) + 1} of ${sections.length}`}>
+      {sections.map((part) => (
+        <Meter key={part.title} label={part.title}
+          fraction={Math.max(0, Math.min(part.end - part.start, questionIndex - part.start)) / (part.end - part.start)} />
+      ))}
+    </div>
+  );
+}
+
 /** One statement with its five-point answer scale. Keys 1–5 answer. */
 export function QuestionCard({ index, selected, onAnswer }: { index: number; selected?: number; onAnswer: (v: number) => void }) {
+  const partIndex = sectionOf(index);
   return (
     <section className="question">
-      <p className="muted">Statement {index + 1} of {questions.length}</p>
-      <Meter fraction={index / questions.length} label="Questionnaire progress" />
-      <h1 className="serif statement" key={index}>{questions[index].text}</h1>
-      <p className="muted">How true is this for you?</p>
+      <div className="row wrap">
+        <strong className="small">Part {partIndex + 1} of {sections.length} · {sections[partIndex].title}</strong>
+        <span className="spacer" />
+        <span className="muted small">Statement {index + 1} of {questions.length}</span>
+      </div>
+      <PartsMap questionIndex={index} />
+      <h1 className="statement" key={index}>{questions[index].text}</h1>
+      <p className="muted">How true is this for you? Go with your first instinct.</p>
       <div className="scale" role="group" aria-label="How true is this for you?">
         {scale.map((label, value) => (
           <button key={label} className={`choice ${selected === value ? "selected" : ""}`} aria-pressed={selected === value}
@@ -115,6 +140,23 @@ export function QuestionCard({ index, selected, onAnswer }: { index: number; sel
   );
 }
 
+/** A short pause between questionnaire parts. */
+function Breather({ part }: { part: number }) {
+  const { state, dispatch } = useStore();
+  return (
+    <main className="narrow breather">
+      <BackButton />
+      <div className="center-block">
+        <div className="hero-emoji" aria-hidden>{["🌱", "🌿", "🌳"][Math.min(part, 2)]}</div>
+        <h1>Part {part + 1} done</h1>
+        <p className="lead">{sections[part].cheer}</p>
+        <PartsMap questionIndex={state.questionIndex} />
+        <button className="primary large" autoFocus onClick={() => dispatch({ type: "continueAfterBreak" })}>Keep going</button>
+      </div>
+    </main>
+  );
+}
+
 function SourceStep() {
   const { state, dispatch } = useStore();
   const fears = sourceFears(state);
@@ -124,9 +166,13 @@ function SourceStep() {
   return (
     <main className="narrow">
       <BackButton />
+      {state.sourceIndex === 0 && <p className="callout">🎉 {sections.at(-1)?.cheer}</p>}
       <p className="muted">Fear {state.sourceIndex + 1} of {fears.length}</p>
       <FearTag fear={fear} large />
-      <h1 className="serif">{fearInfo(fear).summary} Where do you think it started?</h1>
+      <header className="stack-tight">
+        <h1>Where might this one have started?</h1>
+        <p className="lead">{fearInfo(fear).summary} There's no wrong answer. Go with what feels closest.</p>
+      </header>
       <div className="sources" role="radiogroup" aria-label="Where it started">
         {sources.map((s) => (
           <button key={s.id} role="radio" aria-checked={chosen === s.id}
@@ -142,7 +188,7 @@ function SourceStep() {
         ))}
       </div>
       <label className="field">
-        <span className="muted">Earliest memory of this fear (optional)</span>
+        <span className="muted">Earliest memory of this fear (optional, just for you)</span>
         <textarea rows={2} value={state.draft.sourceNotes[fear] ?? ""}
           onChange={(e) => dispatch({ type: "sourceNote", fear, note: e.target.value })} />
       </label>
@@ -163,7 +209,7 @@ function Reveal() {
       <RevealContent profile={state.profile} focusCount={state.settings.focusCount} />
       <div className="actions center-actions">
         <button className="primary large" autoFocus onClick={() => { dispatch({ type: "page", page: "board" }); dispatch({ type: "goto", phase: "main" }); }}>
-          Start my quests
+          Show me my quests
         </button>
       </div>
     </main>
@@ -175,18 +221,26 @@ export function RevealContent({ profile, focusCount }: { profile: Profile; focus
   const gamePlan = plan(profile, focusCount);
   return (
     <div className="stack">
-      <header>
-        <h1 className="serif">Here's what's actually holding you back</h1>
+      <header className="stack-tight">
+        <h1>Here's what's been holding you back</h1>
         <p className="lead">Stuck in {lifeAreaTitle(profile.lifeArea).toLowerCase()}. These are the fears doing the most work behind the scenes.</p>
       </header>
+      <p className="callout row-top">
+        <span aria-hidden>💛</span>
+        <span>
+          This isn't a verdict on who you are. Fears are old protectors doing their job a little too well. Next, you'll get
+          small, doable quests that show them you're safe.
+        </span>
+      </p>
       {gamePlan.fears.map((fp, i) => {
         const info = fearInfo(fp.fear);
         return (
           <section className="card" key={fp.fear}>
             <div className="row">
-              <span className="rank-number">#{i + 1}</span>
+              <span className="family-emoji" aria-hidden>{families.find((f) => f.id === info.family)?.emoji}</span>
               <FearTag fear={fp.fear} large />
               <span className="spacer" />
+              <span className="rank-number">#{i + 1}</span>
               <span className="percent">{fp.score.percent}%</span>
             </div>
             <p className="big">{info.summary}</p>

@@ -15,6 +15,16 @@ enum FearFamily: String, Codable, CaseIterable, Identifiable {
         }
     }
 
+    /// A friendly marker shown next to the family's name.
+    var emoji: String {
+        switch self {
+        case .selfWorth: "🪞"
+        case .social: "👥"
+        case .uncertainty: "🧭"
+        case .connection: "🫶"
+        }
+    }
+
     /// Base hue (0...1) for this family.
     var hue: Double {
         switch self {

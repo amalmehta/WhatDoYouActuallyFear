@@ -1,5 +1,5 @@
 // Pure logic: scoring, plan building, quest unlocking and XP. A port of the Mac app's Engine.swift.
-import { examples, fears, lifeAreas, questions, rules, sources } from "./content";
+import { cheers, examples, fears, lifeAreas, questions, rules, sections, sources } from "./content";
 import type { FearId, FearInfo, LifeAreaId, Profile, QuestCompletion, Source, SourceId } from "./types";
 
 export interface FearScore { fear: FearId; percent: number }
@@ -118,6 +118,37 @@ export function status(quest: Quest, gamePlan: GamePlan, profile: Profile): Ques
   if (!fearPlan || index < 0) return { type: "locked" };
   if (index === 0) return { type: "available" };
   return { type: profile.completions[fearPlan.quests[index - 1].id] ? "available" : "locked" };
+}
+
+/**
+ * The one quest to suggest next: one already accepted (finish what you started), else the first one
+ * unlocked, else the boss once it's open. Undefined when everything is done.
+ */
+export function nextQuest(gamePlan: GamePlan, profile: Profile): Quest | undefined {
+  const all = [...gamePlan.fears.flatMap((fp) => fp.quests), ...(gamePlan.boss ? [gamePlan.boss] : [])];
+  const started = all.find((q) => profile.accepted[q.id] !== undefined && !profile.completions[q.id]);
+  return started ?? all.find((q) => status(q, gamePlan, profile).type === "available");
+}
+
+/** Which of the questionnaire's four parts a statement belongs to. */
+export const sectionOf = (index: number) => {
+  const found = sections.findIndex((s) => index >= s.start && index < s.end);
+  return found < 0 ? sections.length - 1 : found;
+};
+
+/** The same encouragement for the same quest every time, in both apps. */
+export function cheerFor(questId: string): string {
+  let sum = 0;
+  for (const ch of questId) sum += ch.codePointAt(0)!;
+  return cheers[sum % cheers.length];
+}
+
+/** Compares how scary a quest was expected to be with how it felt. */
+export function realityLine(predicted: number, actual: number): string {
+  const gap = predicted - actual;
+  if (gap > 0) return `You expected ${predicted}/10 and it felt like ${actual}. Your fear overestimated by ${gap}.`;
+  if (gap === 0) return `It felt about as scary as you expected (${actual}/10), and you did it anyway.`;
+  return `It felt scarier than expected (${actual}/10), and you still did it. That counts double.`;
 }
 
 export const xp = (profile: Profile) => Object.values(profile.completions).reduce((sum, c) => sum + c.xp, 0);

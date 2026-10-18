@@ -7,13 +7,18 @@ import { questions } from "../model/content";
 import { keys } from "../model/store";
 
 async function finishQuestionnaire(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(screen.getByRole("button", { name: "Begin" }));
+  await user.click(screen.getByRole("button", { name: "Let's begin" }));
   await user.click(screen.getByRole("radio", { name: /Creative work/ }));
   await user.type(screen.getByPlaceholderText(/design lead/), "Show my paintings");
   await user.click(screen.getByRole("button", { name: "Continue" }));
   // First answer by clicking, the rest with keys 1–5.
   await user.click(screen.getByRole("button", { name: /That's me/ }));
-  for (let i = 1; i < questions.length; i++) await user.keyboard(String((i % 5) + 1));
+  for (let i = 1; i < questions.length; i++) {
+    // A breather screen sits between the four parts.
+    const breather = screen.queryByRole("button", { name: "Keep going" });
+    if (breather) await user.click(breather);
+    await user.keyboard(String((i % 5) + 1));
+  }
   for (let i = 0; i < 3; i++) {
     await user.click(screen.getByRole("radio", { name: /Criticism or pressure/ }));
     await user.click(screen.getByRole("button", { name: i < 2 ? "Next fear" : "Show me my fears" }));
@@ -21,18 +26,44 @@ async function finishQuestionnaire(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe("website flow", () => {
+  it("pauses between the four parts of the questionnaire", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole("button", { name: "Let's begin" }));
+    await user.click(screen.getByRole("button", { name: "Continue" }));
+    expect(screen.getByText(/Part 1 of 4/)).toBeTruthy();
+    for (let i = 0; i < 6; i++) await user.keyboard("3");
+    expect(screen.getByRole("heading", { name: "Part 1 done" })).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Keep going" }));
+    expect(screen.getByText(/Part 2 of 4/)).toBeTruthy();
+    expect(screen.getByText(`Statement 7 of ${questions.length}`)).toBeTruthy();
+  });
+
+  it("puts the next step first and explains quests once", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await finishQuestionnaire(user);
+    await user.click(screen.getByRole("button", { name: "Show me my quests" }));
+    const next = screen.getByRole("region", { name: "Your next step" });
+    expect(within(next).getByRole("button", { name: "Accept quest" })).toBeTruthy();
+    const intro = screen.getByRole("region", { name: "How quests work" });
+    await user.click(within(intro).getByRole("button", { name: "Got it" }));
+    expect(screen.queryByRole("region", { name: "How quests work" })).toBeNull();
+    expect(JSON.parse(localStorage.getItem(keys.settings)!).seenQuestIntro).toBe(true);
+  });
+
   it("goes from the questionnaire to a saved quest plan", async () => {
     const user = userEvent.setup();
     render(<App />);
     await finishQuestionnaire(user);
 
-    expect(screen.getByRole("heading", { name: /actually holding you back/ })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: /been holding you back/ })).toBeTruthy();
     expect(screen.getByRole("list", { name: "Every fear's score" }).children).toHaveLength(11);
     const saved = JSON.parse(localStorage.getItem(keys.profile)!);
     expect(Object.keys(saved.answers)).toHaveLength(questions.length);
     expect(saved.lifeArea).toBe("creativity");
 
-    await user.click(screen.getByRole("button", { name: "Start my quests" }));
+    await user.click(screen.getByRole("button", { name: "Show me my quests" }));
     expect(screen.getByRole("heading", { name: "Quest Board" })).toBeTruthy();
     expect(screen.getByRole("region", { name: "Final boss" }).textContent).toContain("Show my paintings");
     // Steps show an example for the chosen area (Creative work).
@@ -42,10 +73,16 @@ describe("website flow", () => {
     await user.click(screen.getAllByRole("button", { name: "Accept" })[0]);
     const accept = screen.getByRole("dialog");
     await user.click(within(accept).getByRole("button", { name: "Accept quest" }));
-    await user.click(screen.getByRole("button", { name: "I did it" }));
+    await user.click(screen.getAllByRole("button", { name: "I did it" })[0]);
     const finish = screen.getByRole("dialog");
     await user.type(within(finish).getByRole("textbox"), "Less scary than I thought");
     await user.click(within(finish).getByRole("button", { name: "I did it" }));
+
+    // Finishing celebrates, then gets out of the way.
+    const party = screen.getByRole("dialog", { name: "Quest complete!" });
+    expect(party.textContent).toContain("+30 XP");
+    await user.click(within(party).getByRole("button", { name: "Keep going" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
     expect(screen.getByText(/points less scary than you expected|facing it head-on/)).toBeTruthy();
     expect(screen.getByText(/feared 5 → felt 5/)).toBeTruthy();
 
@@ -60,7 +97,7 @@ describe("website flow", () => {
     const user = userEvent.setup();
     const first = render(<App />);
     await finishQuestionnaire(user);
-    await user.click(screen.getByRole("button", { name: "Start my quests" }));
+    await user.click(screen.getByRole("button", { name: "Show me my quests" }));
     first.unmount();
     render(<App />);
     expect(screen.getByRole("heading", { name: "Quest Board" })).toBeTruthy();
@@ -69,7 +106,7 @@ describe("website flow", () => {
   it("back steps through the questionnaire", async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole("button", { name: "Begin" }));
+    await user.click(screen.getByRole("button", { name: "Let's begin" }));
     await user.click(screen.getByRole("button", { name: "Continue" }));
     await user.keyboard("3");
     expect(screen.getByText(`Statement 2 of ${questions.length}`)).toBeTruthy();
@@ -101,7 +138,7 @@ describe("website flow", () => {
     await user.click(screen.getByRole("button", { name: "Settings" }));
     await user.click(screen.getByRole("button", { name: "Erase everything…" }));
     await user.click(screen.getByRole("button", { name: "Erase everything" }));
-    expect(screen.getByRole("button", { name: "Begin" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Let's begin" })).toBeTruthy();
     expect(localStorage.getItem(keys.profile)).toBeNull();
   });
 

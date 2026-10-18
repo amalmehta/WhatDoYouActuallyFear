@@ -33,12 +33,18 @@ enum Theme {
         }
     }
 
+    /// Warm paper in light mode, warm charcoal in dark mode.
     static func background(_ scheme: ColorScheme) -> Color {
-        scheme == .dark ? Color(white: 0.11) : Color(white: 0.965)
+        scheme == .dark ? Color(red: 0.118, green: 0.106, blue: 0.098) : Color(red: 0.984, green: 0.968, blue: 0.945)
     }
 
     static func card(_ scheme: ColorScheme) -> Color {
-        scheme == .dark ? Color(white: 0.16) : Color.white
+        scheme == .dark ? Color(red: 0.169, green: 0.153, blue: 0.141) : Color(red: 1, green: 0.996, blue: 0.988)
+    }
+
+    /// A soft tint of the accent, for friendly callouts.
+    static func accentSoft(_ scheme: ColorScheme) -> Color {
+        accent.opacity(scheme == .dark ? 0.18 : 0.10)
     }
 
     static let accent = Color(hue: 0.05, saturation: 0.75, brightness: 0.85)
@@ -46,19 +52,20 @@ enum Theme {
 
 struct CardModifier: ViewModifier {
     @Environment(\.colorScheme) private var scheme
-    var padding: CGFloat = 18
+    var padding: CGFloat = 20
 
     func body(content: Content) -> some View {
         content
             .padding(padding)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Theme.card(scheme)))
-            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(.primary.opacity(0.07)))
+            .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(Theme.card(scheme))
+                .shadow(color: .black.opacity(scheme == .dark ? 0.25 : 0.06), radius: 10, y: 3))
+            .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(.primary.opacity(0.05)))
     }
 }
 
 extension View {
-    func card(padding: CGFloat = 18) -> some View { modifier(CardModifier(padding: padding)) }
+    func card(padding: CGFloat = 20) -> some View { modifier(CardModifier(padding: padding)) }
 }
 
 /// A colored chip naming a fear.
@@ -144,7 +151,7 @@ struct FamilyLegend: View {
             ForEach(FearFamily.allCases) { family in
                 HStack(spacing: 5) {
                     Circle().fill(Theme.color(family, scheme)).frame(width: 8, height: 8)
-                    Text(family.title).font(.caption).foregroundStyle(.secondary)
+                    Text("\(family.emoji) \(family.title)").font(.caption).foregroundStyle(.secondary)
                 }
             }
         }
@@ -169,6 +176,7 @@ enum SettingsKey {
     static let focusCount = "focusCount"
     static let showXP = "showXP"
     static let appearance = "appearance"
+    static let seenQuestIntro = "seenQuestIntro"
 }
 
 /// A thin progress bar (drawn by hand so it also renders in README screenshots).
@@ -185,5 +193,22 @@ struct Meter: View {
         }
         .frame(height: 6)
         .accessibilityValue("\(Int(fraction * 100)) percent")
+    }
+}
+
+/// The questionnaire's four parts as segments: done ones full, the current one filling up.
+struct PartsMap: View {
+    /// Index of the statement being answered (or, on a breather, of the next one).
+    let questionIndex: Int
+
+    var body: some View {
+        HStack(spacing: 6) {
+            ForEach(Array(Questions.sections.enumerated()), id: \.offset) { _, part in
+                let done = Double(max(0, min(part.range.count, questionIndex - part.range.lowerBound)))
+                Meter(fraction: done / Double(part.range.count))
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Part \(Questions.section(containing: min(questionIndex, Questions.all.count - 1)) + 1) of \(Questions.sections.count)")
     }
 }

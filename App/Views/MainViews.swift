@@ -17,6 +17,14 @@ struct RootView: View {
         .frame(minWidth: 920, minHeight: 660)
         .onAppear { (Appearance(rawValue: appearance) ?? .system).apply() }
         .onChange(of: appearance) { _, new in (Appearance(rawValue: new) ?? .system).apply() }
+        .overlay {
+            if let celebration = store.celebration {
+                CelebrationView(celebration: celebration) { store.celebration = nil }
+                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
+            }
+        }
+        .animation(.spring(duration: 0.35), value: store.celebration)
+        .fontDesign(.rounded)
         .modifier(ProgressTransfer(showImporter: $showImporter, showExporter: $showExporter, acceptsDropAndPaste: true))
         .onChange(of: store.transferRequest) { _, request in
             switch request {
@@ -85,12 +93,14 @@ struct QuestBoardView: View {
     @Environment(\.colorScheme) private var scheme
     @AppStorage(SettingsKey.focusCount) private var focusCount = 3
     @AppStorage(SettingsKey.showXP) private var showXP = true
+    @AppStorage(SettingsKey.seenQuestIntro) private var seenQuestIntro = false
     @State private var selected: Quest?
 
     var body: some View {
         ScrollView {
             if let profile = store.profile {
-                QuestBoardContent(profile: profile, focusCount: focusCount, showXP: showXP) { selected = $0 }
+                QuestBoardContent(profile: profile, focusCount: focusCount, showXP: showXP,
+                                  showIntro: !seenQuestIntro, onDismissIntro: { withAnimation { seenQuestIntro = true } }) { selected = $0 }
                     .padding(28)
                     .frame(maxWidth: 900)
                     .frame(maxWidth: .infinity)
@@ -105,11 +115,18 @@ struct QuestBoardContent: View {
     let profile: Profile
     let focusCount: Int
     let showXP: Bool
+    var showIntro = false
+    var onDismissIntro: () -> Void = {}
     var onSelect: (Quest) -> Void = { _ in }
 
     var body: some View {
         let plan = Engine.plan(for: profile, focusCount: focusCount)
         VStack(alignment: .leading, spacing: 20) {
+            if showIntro { QuestIntroCard(onDismiss: onDismissIntro) }
+            if let next = Engine.nextQuest(in: plan, profile: profile) {
+                NextStepCard(quest: next, status: Engine.status(of: next, in: plan, profile: profile),
+                             fearName: next.fear.info.name, onSelect: onSelect)
+            }
             ProgressHeader(profile: profile, showXP: showXP)
             ForEach(plan.fears) { fearPlan in
                 VStack(alignment: .leading, spacing: 12) {
@@ -151,8 +168,8 @@ struct ProgressHeader: View {
         HStack(alignment: .center, spacing: 24) {
             if showXP {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Rank").font(.caption).foregroundStyle(.secondary)
-                    Text(rank.title).font(.system(size: 26, weight: .bold, design: .serif))
+                    Text("Your rank").font(.caption).foregroundStyle(.secondary)
+                    Text(rank.title).font(.system(size: 26, weight: .bold, design: .rounded))
                     if let next = rank.next {
                         Meter(fraction: Double(xp - rank.floor) / Double(next - rank.floor))
                             .frame(width: 220)
@@ -173,7 +190,7 @@ struct ProgressHeader: View {
                         .font(.title3.weight(.medium))
                         .fixedSize(horizontal: false, vertical: true)
                 } else {
-                    Text("Accept a quest, rate how scary it feels, then do it. You'll see how your fear compares to what really happens.")
+                    Text("Each time you finish a quest, you'll see how the real thing compared to the fear. It's usually kinder than you expect.")
                         .font(.callout)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -271,7 +288,7 @@ struct BossCard: View {
                 .foregroundStyle(status == .locked ? AnyShapeStyle(.tertiary) : AnyShapeStyle(Theme.accent))
             VStack(alignment: .leading, spacing: 6) {
                 Text("FINAL BOSS").font(.caption.weight(.bold)).foregroundStyle(.secondary)
-                Text(quest.title).font(.system(size: 22, weight: .bold, design: .serif))
+                Text(quest.title).font(.system(size: 22, weight: .bold, design: .rounded))
                 Text(quest.detail).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
                 if status == .locked {
                     Text("Unlocks when you've finished every quest for one fear.")
@@ -312,7 +329,7 @@ struct QuestSheet: View {
         } ?? .locked
         VStack(alignment: .leading, spacing: 16) {
             FearTag(fear: quest.fear)
-            Text(quest.title).font(.system(size: 24, weight: .bold, design: .serif))
+            Text(quest.title).font(.system(size: 24, weight: .bold, design: .rounded))
             Text(quest.detail).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
             if let example = quest.example {
                 ExampleLine(example: example, fear: quest.fear)
@@ -320,11 +337,11 @@ struct QuestSheet: View {
             Divider()
             switch status {
             case .available:
-                ratingSlider("How scary does this feel right now?")
+                ratingSlider("How scary does this feel right now? Any number is fine.")
                 buttons(primary: "Accept quest") { store.accept(quest, predicted: Int(rating)) }
             case .accepted(let predicted):
                 Text("You expected this to be \(predicted)/10 scary.").foregroundStyle(.secondary)
-                ratingSlider("How scary was it actually?")
+                ratingSlider("How scary was it, really?")
                 TextField("What happened? What did you learn? (optional)", text: $note, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .accessibilityIdentifier("questNote")
@@ -337,7 +354,7 @@ struct QuestSheet: View {
                 if !c.note.isEmpty { Text(c.note).italic() }
                 buttons(primary: "Close", secondary: ("Mark as not done", { store.undo(quest) })) {}
             case .locked:
-                Text("Finish the quest before this one to unlock it.").foregroundStyle(.secondary)
+                Text("This one opens up once you've finished the step before it. No rush.").foregroundStyle(.secondary)
                 buttons(primary: "Close") {}
             }
         }
@@ -466,8 +483,8 @@ struct JournalView: View {
         let entries = (store.profile?.completions.values.sorted { $0.date > $1.date }) ?? []
         Group {
             if entries.isEmpty {
-                ContentUnavailableView("No quests faced yet", systemImage: "book.closed",
-                                       description: Text("Finished quests and what you learned from them show up here."))
+                ContentUnavailableView("Your journal is waiting", systemImage: "book.closed",
+                                       description: Text("When you finish a quest, how it felt and what you learned will live here. Every entry is proof you can do hard things."))
             } else {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
@@ -521,5 +538,143 @@ struct ExampleLine: View {
         .padding(.vertical, 6)
         .background(RoundedRectangle(cornerRadius: 8).fill(Theme.color(fear, scheme).opacity(scheme == .dark ? 0.14 : 0.09)))
         .help("An example for \(example.area.title.lowercased())")
+    }
+}
+
+/// A short, dismissible explanation of how quests work, shown until the person taps "Got it".
+struct QuestIntroCard: View {
+    @Environment(\.colorScheme) private var scheme
+    let onDismiss: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("👋 How quests work").font(.title3.weight(.bold))
+            HStack(alignment: .top, spacing: 16) {
+                step(1, "Pick your next quest and rate how scary it feels.")
+                step(2, "Go and do it, in your own time. Small is fine.")
+                step(3, "Come back, tap I did it, and rate how it really felt.")
+            }
+            HStack {
+                Text("Quests unlock one at a time, so you're never asked to jump ahead.")
+                    .font(.callout).foregroundStyle(.secondary)
+                Spacer()
+                Button("Got it", action: onDismiss)
+                    .accessibilityIdentifier("dismissIntro")
+            }
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 20).fill(Theme.accentSoft(scheme)))
+    }
+
+    private func step(_ n: Int, _ text: String) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Text("\(n)")
+                .font(.callout.weight(.bold))
+                .frame(width: 24, height: 24)
+                .background(Circle().fill(Theme.accent))
+                .foregroundStyle(.white)
+            Text(text).fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+/// The one quest to do next, front and centre.
+struct NextStepCard: View {
+    @Environment(\.colorScheme) private var scheme
+    let quest: Quest
+    let status: QuestStatus
+    let fearName: String
+    let onSelect: (Quest) -> Void
+
+    var body: some View {
+        let color = Theme.color(quest.fear, scheme)
+        let started: Bool = { if case .accepted = status { return true } else { return false } }()
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                Text(started ? "🔥 In progress" : "👉 Your next step")
+                    .font(.callout.weight(.bold))
+                    .foregroundStyle(Theme.accent)
+                Spacer()
+                FearTag(fear: quest.fear)
+            }
+            Text(quest.title).font(.system(size: 24, weight: .bold, design: .rounded))
+            Text(quest.detail).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+            if let example = quest.example { ExampleLine(example: example, fear: quest.fear) }
+            HStack {
+                Text(started ? "When you've done it, come back and tell me how it went."
+                             : "Take your time. Nothing happens until you say so.")
+                    .font(.callout).foregroundStyle(.secondary)
+                Spacer()
+                Button(started ? "I did it" : "Accept quest") { onSelect(quest) }
+                    .buttonStyle(.borderedProminent)
+                    .tint(Theme.accent)
+                    .controlSize(.large)
+                    .accessibilityIdentifier("nextStepAction")
+            }
+        }
+        .padding(22)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 22, style: .continuous).fill(Theme.card(scheme))
+            .shadow(color: color.opacity(0.25), radius: 14, y: 4))
+        .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).strokeBorder(color.opacity(0.5), lineWidth: 1.5))
+        .accessibilityIdentifier("nextStep")
+    }
+}
+
+/// A short celebration after finishing a quest. Confetti is skipped when Reduce Motion is on.
+struct CelebrationView: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let celebration: Celebration
+    let onDismiss: () -> Void
+    @State private var burst = false
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.25).ignoresSafeArea()
+                .onTapGesture(perform: onDismiss)
+            if !reduceMotion {
+                ForEach(0..<18, id: \.self) { i in
+                    let angle = Double(i) / 18 * 2 * .pi
+                    Text(["🎉", "✨", "🌟", "💛", "🌱", "🎊"][i % 6])
+                        .font(.system(size: 26))
+                        .offset(x: burst ? cos(angle) * 260 : 0, y: burst ? sin(angle) * 200 : 0)
+                        .opacity(burst ? 0 : 1)
+                        .animation(.easeOut(duration: 1.4).delay(Double(i % 3) * 0.05), value: burst)
+                        .accessibilityHidden(true)
+                }
+            }
+            VStack(spacing: 14) {
+                Text("🎉").font(.system(size: 52)).accessibilityHidden(true)
+                Text("Quest complete!").font(.system(size: 28, weight: .bold, design: .rounded))
+                Text(celebration.cheer).font(.title3.weight(.medium))
+                Text(celebration.reality)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("+\(celebration.quest.xp) XP").font(.headline.monospacedDigit()).foregroundStyle(Theme.accent)
+                if let rank = celebration.newRank {
+                    Text("✨ New rank: \(rank)")
+                        .font(.headline)
+                        .padding(.horizontal, 14).padding(.vertical, 8)
+                        .background(Capsule().fill(Theme.accentSoft(scheme)))
+                }
+                Button("Keep going", action: onDismiss)
+                    .buttonStyle(.borderedProminent)
+                    .tint(Theme.accent)
+                    .controlSize(.large)
+                    .keyboardShortcut(.defaultAction)
+                    .accessibilityIdentifier("keepGoing")
+            }
+            .padding(32)
+            .frame(maxWidth: 440)
+            .background(RoundedRectangle(cornerRadius: 26, style: .continuous).fill(Theme.card(scheme))
+                .shadow(color: .black.opacity(0.2), radius: 30, y: 10))
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("celebration")
+        }
+        .onAppear { burst = true }
     }
 }

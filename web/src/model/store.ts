@@ -1,6 +1,6 @@
 // App state and persistence (browser localStorage). Mirrors the Mac app's AppStore.
 import { questions } from "./content";
-import { emptyProfile, topFears } from "./engine";
+import { cheerFor, emptyProfile, rank, realityLine, sectionOf, topFears, xp } from "./engine";
 import type { FeedbackEntry, FearId, Profile, SourceId } from "./types";
 import type { Quest } from "./engine";
 
@@ -11,6 +11,8 @@ export interface Settings {
   focusCount: number;
   showXP: boolean;
   appearance: "system" | "light" | "dark";
+  /** The "How quests work" card has been dismissed. */
+  seenQuestIntro: boolean;
 }
 
 export interface State {
@@ -23,10 +25,22 @@ export interface State {
   settings: Settings;
   /** True when showing sample data (?demo): nothing is saved. */
   demo: boolean;
+  /** Set right after a questionnaire part ends (index of that part); the breather shows until cleared. */
+  sectionBreak: number | null;
+  /** Set when a quest is finished; the celebration shows until cleared. */
+  celebration: Celebration | null;
+}
+
+export interface Celebration {
+  quest: Quest;
+  cheer: string;
+  reality: string;
+  /** Set when this quest moved the person up a rank. */
+  newRank: string | null;
 }
 
 export const keys = { profile: "wdyaf.profile", settings: "wdyaf.settings", feedback: "wdyaf.feedback" };
-export const defaultSettings: Settings = { focusCount: 3, showXP: true, appearance: "system" };
+export const defaultSettings: Settings = { focusCount: 3, showXP: true, appearance: "system", seenQuestIntro: false };
 
 function readJSON<T>(key: string): T | null {
   try {
@@ -57,6 +71,8 @@ export function initialState(demoProfile?: Profile): State {
     sourceIndex: 0,
     settings: { ...defaultSettings, ...readJSON<Partial<Settings>>(keys.settings) },
     demo: Boolean(demoProfile),
+    sectionBreak: null,
+    celebration: null,
   };
 }
 
@@ -76,7 +92,9 @@ export type Action =
   | { type: "undo"; quest: Quest }
   | { type: "settings"; settings: Partial<Settings> }
   | { type: "erase" }
-  | { type: "import"; profile: Profile };
+  | { type: "import"; profile: Profile }
+  | { type: "continueAfterBreak" }
+  | { type: "dismissCelebration" };
 
 export const sourceFears = (state: State) => topFears(state.draft.answers);
 
@@ -86,7 +104,7 @@ export function reducer(state: State, action: Action): State {
       return {
         ...state,
         draft: { ...emptyProfile(), lifeArea: state.profile?.lifeArea ?? "career", goal: state.profile?.goal ?? "" },
-        questionIndex: 0, sourceIndex: 0, phase: "area",
+        questionIndex: 0, sourceIndex: 0, sectionBreak: null, phase: "area",
       };
     case "setArea":
       return { ...state, draft: { ...state.draft, lifeArea: action.area } };
@@ -98,14 +116,20 @@ export function reducer(state: State, action: Action): State {
       return { ...state, page: action.page };
     case "answer": {
       const draft = { ...state.draft, answers: { ...state.draft.answers, [questions[state.questionIndex].id]: action.value } };
-      if (state.questionIndex + 1 < questions.length) return { ...state, draft, questionIndex: state.questionIndex + 1 };
-      return { ...state, draft, sourceIndex: 0, phase: "sources" };
+      if (state.questionIndex + 1 < questions.length) {
+        const part = sectionOf(state.questionIndex);
+        const sectionBreak = sectionOf(state.questionIndex + 1) !== part ? part : null;
+        return { ...state, draft, sectionBreak, questionIndex: state.questionIndex + 1 };
+      }
+      return { ...state, draft, sectionBreak: null, sourceIndex: 0, phase: "sources" };
     }
     case "back":
       switch (state.phase) {
         case "area": return { ...state, phase: state.profile ? "main" : "welcome" };
         case "questions":
-          return state.questionIndex > 0 ? { ...state, questionIndex: state.questionIndex - 1 } : { ...state, phase: "area" };
+          return state.questionIndex > 0
+            ? { ...state, sectionBreak: null, questionIndex: state.questionIndex - 1 }
+            : { ...state, sectionBreak: null, phase: "area" };
         case "sources":
           return state.sourceIndex > 0 ? { ...state, sourceIndex: state.sourceIndex - 1 } : { ...state, phase: "questions" };
         default: return state;
@@ -143,8 +167,19 @@ export function reducer(state: State, action: Action): State {
           predicted, actual: action.actual, note: action.note.trim(),
         },
       };
-      return { ...state, profile: { ...state.profile, accepted, completions } };
+      const before = rank(xp(state.profile)).title;
+      const profile = { ...state.profile, accepted, completions };
+      const after = rank(xp(profile)).title;
+      const celebration: Celebration = {
+        quest, cheer: cheerFor(quest.id), reality: realityLine(predicted, action.actual),
+        newRank: after !== before ? after : null,
+      };
+      return { ...state, profile, celebration };
     }
+    case "continueAfterBreak":
+      return { ...state, sectionBreak: null };
+    case "dismissCelebration":
+      return { ...state, celebration: null };
     case "undo": {
       if (!state.profile) return state;
       const accepted = { ...state.profile.accepted };

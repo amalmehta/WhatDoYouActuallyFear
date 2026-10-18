@@ -101,7 +101,7 @@ describe("import and export in the page", () => {
       Object.defineProperty(event, "clipboardData", { value: { files: [], getData: () => text } });
       target.dispatchEvent(event);
     };
-    await user.click(screen.getByRole("button", { name: "Begin" }));
+    await user.click(screen.getByRole("button", { name: "Let's begin" }));
     paste(screen.getByPlaceholderText(/design lead/), macFile);
     expect(screen.queryByRole("dialog")).toBeNull();
     paste(document.body, macFile);

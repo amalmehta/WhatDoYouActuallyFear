@@ -74,6 +74,13 @@ Decided without asking:
 - No file input, so there's no Upload, drop or paste (the file-input rule doesn't apply).
 - SwiftUI on macOS 14+, built with XcodeGen; data stored as JSON in Application Support.
 - Website (2026-10-13). Asked: React + Vite, hosted on GitHub Pages, quiz content copied into JS with a parity test. Decided: TypeScript; progress in localStorage; `?demo` shows sample data without saving; feedback is saved in the browser with an optional "Open as GitHub issue"; Settings via the gear button or ⌘, / Ctrl+,; deployed by a GitHub Actions workflow on every push to main.
+- Friendlier UI/UX (2026-10-17). Asked: both apps, with warmer copy, softer visuals, gentler pacing and small celebrations; PR #2 merged first. Decided:
+  - Look: a warm paper palette (light and dark), rounded system type instead of serif headings, rounder cards with soft shadows, and an emoji for each fear family.
+  - Questionnaire: four parts with a breather and a cheer between them, and a parts map instead of one long bar.
+  - Quest board: a "Your next step" card first, and a one-time "How quests work" card.
+  - Celebrations: one after each finished quest (cheer, fear versus reality, XP, new rank), with no confetti when reduced motion is preferred.
+  - Wording: warmer copy throughout, and gentler rank names (Just Starting, Warming Up).
+  - Parts, cheers, family emoji and rank names are shared content, so the parity test covers them.
 - Area-tailored steps (2026-10-13). Asked: one example line under every step. Decided: 385 hand-written examples, kept in a new Swift file (`AreaExamples.swift`) and copied to the website like the rest of the content. Root and boss quests get none. Quest ids don't change with the area, so progress carries over. UK spelling, to match the questionnaire.
 - Export/import (2026-10-13). Asked: in both apps; importing replaces existing progress after a confirmation. Decided: the file is the existing Profile JSON (sorted keys, whole-second dates), named "What Do You Actually Fear Progress.json"; import from Upload buttons (Settings, sidebar or toolbar, welcome screen, File menu ⌘O/⌘E on Mac), dropping a file anywhere, or ⌘V; shows a preview first; each app is tested against fixtures produced by the other.
 
@@ -89,6 +96,7 @@ CHANGELOG:
 - 2026-10-13 — Mac unit and UI tests now run in GitHub Actions on a macOS runner
 - 2026-10-13 — changes now go through branches and pull requests instead of straight to main
 - 2026-10-13 — quest steps now show an example tailored to the chosen life area (both apps)
+- 2026-10-17 — friendlier UI/UX in both apps: warmer look and copy, questionnaire in four parts with breathers, a next-step card, a quests intro, and celebrations
 - 2026-09-15 — added meta-instruction: built-out applications include a small feedback tab
 - 2026-09-15 — added meta-instruction: no "Claude" attribution in commits, PRs, or branches
 - 2026-09-16 — added meta-instruction: always include a README when adding to GitHub
