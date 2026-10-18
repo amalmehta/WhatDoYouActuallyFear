@@ -10,6 +10,7 @@ WhatDoYouActuallyFear/
 │   ├── Model/
 │   │   ├── Fear.swift               Fear IDs and families, source kinds (with root exercises), life areas
 │   │   ├── FearLibrary.swift        Content for all 11 fears: summary, belief, reframe, 5-step ladder
+│   │   ├── AreaExamples.swift       One example per fear, life area and step (385 lines)
 │   │   ├── Questions.swift          The 22 statements and how each one weights the fears
 │   │   ├── Profile.swift            Saved data: answers, sources, accepted quests, completions; feedback entries
 │   │   ├── Engine.swift             Pure logic: scoring, plan building, unlocking, XP, ranks, fear vs. reality

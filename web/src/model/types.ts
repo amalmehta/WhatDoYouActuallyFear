@@ -39,6 +39,8 @@ export interface Question {
   weights: Partial<Record<FearId, number>>;
 }
 
+export type AreaExamples = Record<FearId, Record<LifeAreaId, string[]>>;
+
 export interface Rules {
   stepXP: number[];
   sourceXP: number;

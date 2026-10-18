@@ -1,6 +1,6 @@
 // Pure logic: scoring, plan building, quest unlocking and XP. A port of the Mac app's Engine.swift.
-import { fears, lifeAreas, questions, rules, sources } from "./content";
-import type { FearId, FearInfo, Profile, QuestCompletion, Source, SourceId } from "./types";
+import { examples, fears, lifeAreas, questions, rules, sources } from "./content";
+import type { FearId, FearInfo, LifeAreaId, Profile, QuestCompletion, Source, SourceId } from "./types";
 
 export interface FearScore { fear: FearId; percent: number }
 
@@ -13,7 +13,13 @@ export interface Quest {
   title: string;
   detail: string;
   xp: number;
+  /** What this step looks like in the person's chosen life area (ladder steps only). */
+  example?: { area: LifeAreaId; text: string };
 }
+
+/** The example for one ladder step (1–5) in one life area. */
+export const areaExample = (fear: FearId, area: LifeAreaId, step: number): string | undefined =>
+  examples[fear]?.[area]?.[step - 1];
 
 export type QuestStatus =
   | { type: "locked" }
@@ -71,6 +77,9 @@ export function plan(profile: Profile, focusCount: number): GamePlan {
       { id: `${score.fear}.source`, fear: score.fear, kind: { type: "source" }, title: exercise.title, detail: exercise.detail, xp: rules.sourceXP },
       ...info.ladder.map((step, i): Quest => ({
         id: `${score.fear}.step${i + 1}`, fear: score.fear, kind: { type: "step", n: i + 1 }, title: step.title, detail: step.detail, xp: rules.stepXP[i],
+        ...(areaExample(score.fear, profile.lifeArea, i + 1) !== undefined
+          ? { example: { area: profile.lifeArea, text: areaExample(score.fear, profile.lifeArea, i + 1)! } }
+          : {}),
       })),
     ];
     return { score, fear: score.fear, source, quests };

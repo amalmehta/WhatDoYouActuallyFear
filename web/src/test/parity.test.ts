@@ -17,6 +17,9 @@ describe("content parity with the Mac app", () => {
       expect(fear.howItKeepsYouStuck.length).toBeGreaterThan(0);
     }
     for (const source of swift.sources) expect(source.exercise?.title).toBeTruthy();
+    for (const fear of swift.fears) {
+      for (const area of swift.lifeAreas) expect((swift.examples as Record<string, Record<string, string[]>>)[fear.id]?.[area.id]).toHaveLength(5);
+    }
   });
 
   it("families match", () => expect(web.families).toEqual(swift.families));
@@ -26,4 +29,5 @@ describe("content parity with the Mac app", () => {
   it("answer scale matches", () => expect(web.scale).toEqual(swift.scale));
   it("questions and weights match", () => expect(web.questions).toEqual(swift.questions));
   it("XP and ranks match", () => expect(web.rules).toEqual(swift.rules));
+  it("area examples match", () => expect(web.examples).toEqual(swift.examples));
 });

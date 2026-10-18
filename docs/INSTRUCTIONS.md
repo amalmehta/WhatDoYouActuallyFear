@@ -82,7 +82,7 @@ npm --prefix web run build
 
 - **Phone screenshot for the README:** `node web/scripts/phone-screenshot.mjs` captures the live demo at a 390×844 phone viewport (3×) with Chrome and saves `docs/images/website-phone.png`. You can pass a different URL and output path.
 - **Deploying:** every push to `main` runs `.github/workflows/pages.yml`, which tests, builds and publishes `web/dist` to GitHub Pages.
-- **Changing quiz content:** edit the Swift files in `App/Model/`, then run `npm --prefix web run copy-content`. The parity test fails until the website's copy matches the Swift.
+- **Changing quiz content** (including the area examples in `App/Model/AreaExamples.swift`): edit the Swift files in `App/Model/`, then run `npm --prefix web run copy-content`. The parity test fails until the website's copy matches the Swift.
 - **Where website data lives:** in the browser's localStorage (`wdyaf.profile`, `wdyaf.settings`, `wdyaf.feedback`), only on that browser and device.
 - **Settings:** the gear button, or ⌘, / Ctrl+, (some browsers keep that shortcut for themselves).
 - **Feedback:** saved in the browser. You can also copy it, or open it as a prefilled GitHub issue.
@@ -95,7 +95,7 @@ The Mac app and the website work the same way.
 2. **Answer 22 statements** on a five-point scale. Press 1–5 to answer, and go back with ⌘[ on the Mac or the Back link on the website.
 3. **Find the source.** For each of your top three fears, pick where it most likely started and, if you like, note your earliest memory of it.
 4. **See your results.** Your top fears, the belief underneath each one, and a chart of all eleven fears, colored by family.
-5. **Play the quest board.** Each fear has a *root* quest (working on where it came from) and five exposure steps, smallest to biggest. They unlock one at a time.
+5. **Play the quest board.** Each fear has a *root* quest (working on where it came from) and five exposure steps, smallest to biggest. They unlock one at a time. Each step shows an example of what it looks like in the life area you picked.
    - **Accept** a quest and rate how scary it feels (0–10).
    - Go and do it, then press **I did it** and rate how scary it actually was.
    - You earn XP and ranks (Frozen → Stirring → Stepping Out → Brave → Bold → Fear Facer), and the header shows how much less scary reality has been than you expected.
