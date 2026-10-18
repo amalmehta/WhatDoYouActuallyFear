@@ -97,7 +97,7 @@ final class EngineTests: XCTestCase {
     }
 
     func testXPRankAndRelief() {
-        XCTAssertEqual(Engine.rank(for: 0).title, "Frozen")
+        XCTAssertEqual(Engine.rank(for: 0).title, "Just Starting")
         XCTAssertEqual(Engine.rank(for: 49).next, 50)
         XCTAssertEqual(Engine.rank(for: 150).title, "Stepping Out")
         XCTAssertNil(Engine.rank(for: 5000).next)
@@ -142,6 +142,28 @@ final class EngineTests: XCTestCase {
         XCTAssertNotEqual(moneyStep.example?.text, quests[1].example?.text)
         XCTAssertEqual(moneyStep.id, quests[1].id, "quest ids don't depend on the area, so progress carries over")
         XCTAssertNil(Engine.plan(for: profile, focusCount: 1).boss?.example)
+    }
+
+    func testNextQuestPrefersWhatYouStarted() {
+        var profile = sampleProfile()
+        let plan = Engine.plan(for: profile, focusCount: 2)
+        XCTAssertEqual(Engine.nextQuest(in: plan, profile: profile)?.id, plan.fears[0].quests[0].id, "first unlocked quest")
+        let second = plan.fears[1].quests[0]
+        profile.accepted[second.id] = 6
+        XCTAssertEqual(Engine.nextQuest(in: plan, profile: profile)?.id, second.id, "an accepted quest comes first")
+        for quest in plan.fears.flatMap(\.quests) { profile.completions[quest.id] = completion(for: quest) }
+        profile.accepted = [:]
+        XCTAssertEqual(Engine.nextQuest(in: plan, profile: profile)?.kind, .boss)
+        profile.completions["boss"] = completion(for: plan.boss!)
+        XCTAssertNil(Engine.nextQuest(in: plan, profile: profile))
+    }
+
+    func testEncouragementIsStableAndHonest() {
+        XCTAssertEqual(Encouragement.line(for: "failure.step1"), Encouragement.line(for: "failure.step1"))
+        XCTAssertTrue(Encouragement.questDone.contains(Encouragement.line(for: "boss")))
+        XCTAssertTrue(Encouragement.reality(predicted: 8, actual: 3).contains("overestimated by 5"))
+        XCTAssertTrue(Encouragement.reality(predicted: 4, actual: 4).contains("about as scary"))
+        XCTAssertTrue(Encouragement.reality(predicted: 3, actual: 6).contains("scarier than expected"))
     }
 
     // MARK: Helpers

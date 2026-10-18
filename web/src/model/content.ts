@@ -1,26 +1,30 @@
 // Quiz content, copied from the Mac app's Swift source (App/Model) by `npm run copy-content`.
 // Edit the Swift files, then re-run the script. src/test/parity.test.ts checks the two stay in sync.
-import type { AreaExamples, Family, FearInfo, LifeArea, Question, Rules, Source } from "./types";
+import type { AreaExamples, Family, FearInfo, LifeArea, Question, QuestionSection, Rules, Source } from "./types";
 
 export const families: Family[] = [
   {
     "id": "selfWorth",
-    "title": "Self-Worth",
+    "title": "🪞",
+    "emoji": "🪞",
     "hue": 0.76
   },
   {
     "id": "social",
-    "title": "Other People",
+    "title": "👥",
+    "emoji": "👥",
     "hue": 0.58
   },
   {
     "id": "uncertainty",
-    "title": "Uncertainty",
+    "title": "🧭",
+    "emoji": "🧭",
     "hue": 0.05
   },
   {
     "id": "connection",
-    "title": "Closeness",
+    "title": "🫶",
+    "emoji": "🫶",
     "hue": 0.4
   }
 ];
@@ -700,6 +704,46 @@ export const questions: Question[] = [
   }
 ];
 
+/** The statements come in four short parts, with a breather between them. `end` is exclusive. */
+export const sections: QuestionSection[] = [
+  {
+    "title": "Trying and being seen",
+    "start": 0,
+    "end": 6,
+    "cheer": "Nice start. Three short parts to go."
+  },
+  {
+    "title": "Asking and speaking up",
+    "start": 6,
+    "end": 11,
+    "cheer": "Halfway there. Take a breath. You're doing great."
+  },
+  {
+    "title": "Change and choices",
+    "start": 11,
+    "end": 17,
+    "cheer": "Just one short part left."
+  },
+  {
+    "title": "Closeness and you",
+    "start": 17,
+    "end": 22,
+    "cheer": "All done. Thank you for being honest with yourself."
+  }
+];
+
+/** Encouragement shown when a quest is finished. */
+export const cheers: string[] = [
+  "You did the scary thing.",
+  "That took real courage.",
+  "Look at you, facing it head-on.",
+  "One more brick in a braver you.",
+  "Your future self says thank you.",
+  "Fear talked. You did it anyway.",
+  "Small step, real progress.",
+  "That's how courage grows: one go at a time."
+];
+
 export const rules: Rules = {
   "stepXP": [
     10,
@@ -714,11 +758,11 @@ export const rules: Rules = {
   "ranks": [
     {
       "floor": 0,
-      "title": "Frozen"
+      "title": "Just Starting"
     },
     {
       "floor": 50,
-      "title": "Stirring"
+      "title": "Warming Up"
     },
     {
       "floor": 150,

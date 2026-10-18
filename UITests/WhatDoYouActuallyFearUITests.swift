@@ -106,7 +106,11 @@ final class WhatDoYouActuallyFearUITests: XCTestCase {
         XCTAssertTrue(element("statementCounter").waitForExistence(timeout: 5))
         waitAndClick(element("answer-4"))
         let counter = element("statementCounter")
+        let partStarts: Set<Int> = [6, 11, 17] // a breather screen comes before these statements
         for i in 1..<22 {
+            if partStarts.contains(i) {
+                waitAndClick(element("continueSection"))
+            }
             // Wait for each statement before answering, so no key lands mid-transition.
             let shown = NSPredicate { _, _ in self.text(counter) == "Statement \(i + 1) of 22" }
             wait(for: [XCTNSPredicateExpectation(predicate: shown, object: nil)], timeout: 5)
@@ -137,6 +141,11 @@ final class WhatDoYouActuallyFearUITests: XCTestCase {
         finishSlider.adjust(toNormalizedSliderPosition: 0.2)
         enter("Less scary than I thought", into: element("questNote"))
         waitAndClick(element("questPrimary"))
+
+        // Finishing a quest celebrates, then gets out of the way.
+        XCTAssertTrue(element("celebration").waitForExistence(timeout: 5))
+        waitAndClick(element("keepGoing"))
+        XCTAssertFalse(element("celebration").waitForExistence(timeout: 2))
 
         XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'feared'")).firstMatch.waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "value CONTAINS 'less scary than you expected' OR label CONTAINS 'less scary than you expected'")).firstMatch.exists)

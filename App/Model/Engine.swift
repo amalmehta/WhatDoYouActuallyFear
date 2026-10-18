@@ -56,7 +56,7 @@ enum Engine {
     static let maxFocus = 3
 
     static let ranks: [(Int, String)] = [
-        (0, "Frozen"), (50, "Stirring"), (150, "Stepping Out"),
+        (0, "Just Starting"), (50, "Warming Up"), (150, "Stepping Out"),
         (300, "Brave"), (600, "Bold"), (1000, "Fear Facer"),
     ]
 
@@ -138,6 +138,16 @@ enum Engine {
               let index = fearPlan.quests.firstIndex(where: { $0.id == quest.id }) else { return .locked }
         if index == 0 { return .available }
         return profile.completions[fearPlan.quests[index - 1].id] != nil ? .available : .locked
+    }
+
+    /// The one quest to suggest next: one already accepted (finish what you started), else the first one
+    /// unlocked, else the boss once it's open. Nil when everything is done.
+    static func nextQuest(in plan: GamePlan, profile: Profile) -> Quest? {
+        let all = plan.fears.flatMap(\.quests) + (plan.boss.map { [$0] } ?? [])
+        if let started = all.first(where: { profile.accepted[$0.id] != nil && profile.completions[$0.id] == nil }) {
+            return started
+        }
+        return all.first { status(of: $0, in: plan, profile: profile) == .available }
     }
 
     static func xp(_ profile: Profile) -> Int {

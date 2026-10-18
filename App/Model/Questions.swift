@@ -35,4 +35,23 @@ enum Questions {
         Question(id: "q21", text: "Criticism, even mild, stays with me for days.", weights: [.judgment: 0.7, .notEnough: 0.5, .failure: 0.3]),
         Question(id: "q22", text: "I compare my progress to other people's and feel behind.", weights: [.notEnough: 1]),
     ]
+
+    /// The statements come in four short parts, with a breather between them.
+    static let sections: [QuestionSection] = [
+        QuestionSection(title: "Trying and being seen", range: 0..<6, cheer: "Nice start. Three short parts to go."),
+        QuestionSection(title: "Asking and speaking up", range: 6..<11, cheer: "Halfway there. Take a breath. You're doing great."),
+        QuestionSection(title: "Change and choices", range: 11..<17, cheer: "Just one short part left."),
+        QuestionSection(title: "Closeness and you", range: 17..<22, cheer: "All done. Thank you for being honest with yourself."),
+    ]
+
+    static func section(containing index: Int) -> Int {
+        sections.firstIndex { $0.range.contains(index) } ?? sections.count - 1
+    }
+}
+
+struct QuestionSection {
+    let title: String
+    let range: Range<Int>
+    /// Shown on the breather screen after this part.
+    let cheer: String
 }

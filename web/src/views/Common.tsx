@@ -81,7 +81,7 @@ export function FamilyLegend() {
   return (
     <span className="legend">
       {families.map((f) => (
-        <span key={f.id}><span className="dot" style={{ background: `var(--family-${f.id})` }} aria-hidden />{f.title}</span>
+        <span key={f.id}><span className="dot" style={{ background: `var(--family-${f.id})` }} aria-hidden />{f.emoji} {f.title}</span>
       ))}
     </span>
   );

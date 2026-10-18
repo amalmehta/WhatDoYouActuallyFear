@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { rules } from "../model/content";
-import { averageRelief, fearInfo, plan, rank, scores, sourceInfo, status, xp, type Quest, type QuestStatus } from "../model/engine";
+import { averageRelief, fearInfo, nextQuest, plan, rank, scores, sourceInfo, status, xp, type Quest, type QuestStatus } from "../model/engine";
 import type { Page } from "../model/store";
 import type { Profile } from "../model/types";
 import { ExampleLine, FamilyLegend, FearBars, FearTag, Meter, Modal, SourceTag, useStore, useTransfer } from "./Common";
@@ -55,23 +55,29 @@ export function MainShell({ onSettings, onFeedback }: { onSettings: () => void; 
 // MARK: Quest Board
 
 function QuestBoard() {
-  const { state } = useStore();
+  const { state, dispatch } = useStore();
   const [selected, setSelected] = useState<Quest | null>(null);
   if (!state.profile) return null;
   return (
     <>
-      <QuestBoardContent profile={state.profile} focusCount={state.settings.focusCount} showXP={state.settings.showXP} onSelect={setSelected} />
+      <QuestBoardContent profile={state.profile} focusCount={state.settings.focusCount} showXP={state.settings.showXP}
+        showIntro={!state.settings.seenQuestIntro && !state.demo}
+        onDismissIntro={() => dispatch({ type: "settings", settings: { seenQuestIntro: true } })}
+        onSelect={setSelected} />
       {selected && <QuestDialog quest={selected} onClose={() => setSelected(null)} />}
     </>
   );
 }
 
-export function QuestBoardContent({ profile, focusCount, showXP, onSelect }: {
-  profile: Profile; focusCount: number; showXP: boolean; onSelect: (q: Quest) => void;
+export function QuestBoardContent({ profile, focusCount, showXP, showIntro = false, onDismissIntro = () => {}, onSelect }: {
+  profile: Profile; focusCount: number; showXP: boolean; showIntro?: boolean; onDismissIntro?: () => void; onSelect: (q: Quest) => void;
 }) {
   const gamePlan = plan(profile, focusCount);
+  const next = nextQuest(gamePlan, profile);
   return (
     <div className="stack">
+      {showIntro && <QuestIntro onDismiss={onDismissIntro} />}
+      {next && <NextStep quest={next} status={status(next, gamePlan, profile)} onSelect={onSelect} />}
       <ProgressHeader profile={profile} showXP={showXP} />
       {gamePlan.fears.map((fp) => {
         const done = fp.quests.filter((q) => profile.completions[q.id]).length;
@@ -105,7 +111,7 @@ function ProgressHeader({ profile, showXP }: { profile: Profile; showXP: boolean
     <section className="card progress-header">
       {showXP && (
         <div className="rank">
-          <span className="muted small">Rank</span>
+          <span className="muted small">Your rank</span>
           <span className="serif rank-title">{r.title}</span>
           {r.next !== null ? (
             <>
@@ -118,7 +124,7 @@ function ProgressHeader({ profile, showXP }: { profile: Profile; showXP: boolean
       <div className="relief">
         <span className="muted small">Fear vs. reality</span>
         {relief === null ? (
-          <p className="muted">Accept a quest, rate how scary it feels, then do it. You'll see how your fear compares to what really happens.</p>
+          <p className="muted">Each time you finish a quest, you'll see how the real thing compared to the fear. It's usually kinder than you expect.</p>
         ) : (
           <p className="big">{relief > 0
             ? `Reality has been ${relief.toFixed(1)} points less scary than you expected.`
@@ -209,7 +215,7 @@ function QuestDialog({ quest, onClose }: { quest: Quest; onClose: () => void }) 
       <hr />
       {s.type === "available" && (
         <>
-          {slider("How scary does this feel right now?")}
+          {slider("How scary does this feel right now? Any number is fine.")}
           <div className="actions">
             <button className="secondary" onClick={onClose}>Cancel</button>
             <button className="primary" onClick={act(() => dispatch({ type: "accept", quest, predicted: rating }))}>Accept quest</button>
@@ -219,7 +225,7 @@ function QuestDialog({ quest, onClose }: { quest: Quest; onClose: () => void }) 
       {s.type === "accepted" && (
         <>
           <p className="muted">You expected this to be {s.predicted}/10 scary.</p>
-          {slider("How scary was it actually?")}
+          {slider("How scary was it, really?")}
           <label className="field">
             <span className="muted">What happened? What did you learn? (optional)</span>
             <textarea rows={3} value={note} onChange={(e) => setNote(e.target.value)} />
@@ -245,7 +251,7 @@ function QuestDialog({ quest, onClose }: { quest: Quest; onClose: () => void }) 
       )}
       {s.type === "locked" && (
         <>
-          <p className="muted">Finish the quest before this one to unlock it.</p>
+          <p className="muted">This one opens up once you've finished the step before it. No rush.</p>
           <div className="actions"><button className="primary" onClick={onClose}>Close</button></div>
         </>
       )}
@@ -295,8 +301,9 @@ function Journal() {
   if (entries.length === 0) {
     return (
       <div className="empty">
-        <p className="big">No quests faced yet</p>
-        <p className="muted">Finished quests and what you learned from them show up here.</p>
+        <div className="hero-emoji" aria-hidden>📓</div>
+        <p className="big">Your journal is waiting</p>
+        <p className="muted">When you finish a quest, how it felt and what you learned will live here. Every entry is proof you can do hard things.</p>
       </div>
     );
   }
@@ -315,5 +322,46 @@ function Journal() {
         </section>
       ))}
     </div>
+  );
+}
+
+/** A short, dismissible explanation of how quests work, shown until the person taps "Got it". */
+function QuestIntro({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <section className="intro-card" aria-label="How quests work">
+      <h2 className="h3">👋 How quests work</h2>
+      <ol className="intro-steps">
+        <li>Pick your next quest and rate how scary it feels.</li>
+        <li>Go and do it, in your own time. Small is fine.</li>
+        <li>Come back, tap <strong>I did it</strong>, and rate how it really felt.</li>
+      </ol>
+      <div className="row wrap">
+        <span className="muted small">Quests unlock one at a time, so you're never asked to jump ahead.</span>
+        <span className="spacer" />
+        <button className="secondary" onClick={onDismiss}>Got it</button>
+      </div>
+    </section>
+  );
+}
+
+/** The one quest to do next, front and centre. */
+function NextStep({ quest, status: s, onSelect }: { quest: Quest; status: QuestStatus; onSelect: (q: Quest) => void }) {
+  const started = s.type === "accepted";
+  return (
+    <section className="card next-step" aria-label="Your next step" style={{ "--c": `var(--fear-${quest.fear})` } as React.CSSProperties}>
+      <div className="row wrap">
+        <strong className="next-label">{started ? "🔥 In progress" : "👉 Your next step"}</strong>
+        <span className="spacer" />
+        <FearTag fear={quest.fear} />
+      </div>
+      <h2>{quest.title}</h2>
+      <p className="muted">{quest.detail}</p>
+      <ExampleLine quest={quest} />
+      <div className="row wrap">
+        <span className="muted small">{started ? "When you've done it, come back and tell me how it went." : "Take your time. Nothing happens until you say so."}</span>
+        <span className="spacer" />
+        <button className="primary large" onClick={() => onSelect(quest)}>{started ? "I did it" : "Accept quest"}</button>
+      </div>
+    </section>
   );
 }

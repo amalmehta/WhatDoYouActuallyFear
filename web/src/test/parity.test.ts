@@ -17,6 +17,10 @@ describe("content parity with the Mac app", () => {
       expect(fear.howItKeepsYouStuck.length).toBeGreaterThan(0);
     }
     for (const source of swift.sources) expect(source.exercise?.title).toBeTruthy();
+    expect(swift.sections).toHaveLength(4);
+    expect(swift.sections.at(-1)?.end).toBe(22);
+    expect(swift.cheers.length).toBeGreaterThan(3);
+    for (const family of swift.families) expect(family.emoji).toBeTruthy();
     for (const fear of swift.fears) {
       for (const area of swift.lifeAreas) expect((swift.examples as Record<string, Record<string, string[]>>)[fear.id]?.[area.id]).toHaveLength(5);
     }
@@ -30,4 +34,6 @@ describe("content parity with the Mac app", () => {
   it("questions and weights match", () => expect(web.questions).toEqual(swift.questions));
   it("XP and ranks match", () => expect(web.rules).toEqual(swift.rules));
   it("area examples match", () => expect(web.examples).toEqual(swift.examples));
+  it("questionnaire parts match", () => expect(web.sections).toEqual(swift.sections));
+  it("encouragement matches", () => expect(web.cheers).toEqual(swift.cheers));
 });

@@ -4,6 +4,7 @@ import { initialState, persist, reducer } from "./model/store";
 import { isTyping, StoreContext } from "./views/Common";
 import { MainShell } from "./views/Main";
 import { Onboarding } from "./views/Onboarding";
+import { CelebrationModal } from "./views/Celebration";
 import { ProgressTransfer } from "./views/ProgressTransfer";
 import { FeedbackDialog, SettingsDialog } from "./views/SettingsFeedback";
 
@@ -53,6 +54,7 @@ export function App({ demo = false }: { demo?: boolean }) {
         {saveFailed && <p className="save-warning" role="alert">This browser is blocking storage, so progress won't be saved.</p>}
         {settingsOpen && <SettingsDialog onClose={() => setSettingsOpen(false)} />}
         {feedbackOpen && <FeedbackDialog onClose={() => setFeedbackOpen(false)} />}
+        {state.celebration && <CelebrationModal celebration={state.celebration} onClose={() => dispatch({ type: "dismissCelebration" })} />}
       </ProgressTransfer>
     </StoreContext.Provider>
   );

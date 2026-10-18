@@ -1,7 +1,7 @@
 // Mirrors the Mac app's EngineTests.swift.
 import { describe, expect, it } from "vitest";
-import { fears, lifeAreas, questions, rules, sources } from "../model/content";
-import { areaExample, averageRelief, emptyProfile, plan, rank, scores, status, topFears, xp, type Quest } from "../model/engine";
+import { cheers, fears, lifeAreas, questions, rules, sections, sources } from "../model/content";
+import { areaExample, averageRelief, cheerFor, emptyProfile, nextQuest, plan, rank, realityLine, scores, sectionOf, status, topFears, xp, type Quest } from "../model/engine";
 import { fearColor, hsbToHsl, sourceColor } from "../model/theme";
 import type { Profile, QuestCompletion } from "../model/types";
 
@@ -132,8 +132,35 @@ describe("plan and progress", () => {
     expect(plan(profile, 1).boss?.example).toBeUndefined();
   });
 
+  it("next quest prefers what you started", () => {
+    const profile = sample();
+    const p = plan(profile, 2);
+    expect(nextQuest(p, profile)?.id).toBe(p.fears[0].quests[0].id);
+    const second = p.fears[1].quests[0];
+    profile.accepted[second.id] = 6;
+    expect(nextQuest(p, profile)?.id).toBe(second.id);
+    for (const q of p.fears.flatMap((fp) => fp.quests)) profile.completions[q.id] = completion(q);
+    profile.accepted = {};
+    expect(nextQuest(p, profile)?.kind.type).toBe("boss");
+    profile.completions.boss = completion(p.boss!);
+    expect(nextQuest(p, profile)).toBeUndefined();
+  });
+
+  it("parts cover every statement; encouragement matches the Mac app's rules", () => {
+    expect(sections.reduce((n, s) => n + (s.end - s.start), 0)).toBe(questions.length);
+    expect([0, 5, 6, 10, 11, 16, 17, 21].map(sectionOf)).toEqual([0, 0, 1, 1, 2, 2, 3, 3]);
+    expect(cheerFor("failure.step1")).toBe(cheerFor("failure.step1"));
+    expect(cheers).toContain(cheerFor("boss"));
+    // Same pick as Swift: sum of code points modulo the list length.
+    const sum = [..."failure.source"].reduce((n, c) => n + c.codePointAt(0)!, 0);
+    expect(cheerFor("failure.source")).toBe(cheers[sum % cheers.length]);
+    expect(realityLine(8, 3)).toContain("overestimated by 5");
+    expect(realityLine(4, 4)).toContain("about as scary");
+    expect(realityLine(3, 6)).toContain("scarier than expected");
+  });
+
   it("XP, ranks and relief", () => {
-    expect(rank(0).title).toBe("Frozen");
+    expect(rank(0).title).toBe("Just Starting");
     expect(rank(49).next).toBe(50);
     expect(rank(150).title).toBe("Stepping Out");
     expect(rank(5000).next).toBeNull();

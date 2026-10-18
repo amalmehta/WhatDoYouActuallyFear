@@ -7,7 +7,7 @@ export type FearId =
 export type SourceId = "criticism" | "pastEvent" | "modelled" | "instability" | "comparison" | "unsure";
 export type LifeAreaId = "career" | "relationships" | "friendships" | "health" | "creativity" | "money" | "purpose";
 
-export interface Family { id: FamilyId; title: string; hue: number }
+export interface Family { id: FamilyId; title: string; emoji: string; hue: number }
 export interface QuestTemplate { title: string; detail: string }
 
 export interface FearInfo {
@@ -38,6 +38,8 @@ export interface Question {
   text: string;
   weights: Partial<Record<FearId, number>>;
 }
+
+export interface QuestionSection { title: string; start: number; end: number; cheer: string }
 
 export type AreaExamples = Record<FearId, Record<LifeAreaId, string[]>>;
 
